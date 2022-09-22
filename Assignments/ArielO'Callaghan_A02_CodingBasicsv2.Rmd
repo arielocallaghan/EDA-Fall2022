@@ -55,6 +55,10 @@ median(sequence_100) #run median of sequence function
 8.  Label the columns of your data frame with informative titles.
 
 ```{r}
+Names <- c("Ariel", "Josh", "Mike", "Erin") #Vector type Character
+Testscores <- c(85, 74, 92, 45) # Vector type number
+Passedexam <- c(TRUE, TRUE, TRUE, FALSE) # Vector type argument
+data.frame(Names, Testscores, Passedexam)
 
 ```
 
