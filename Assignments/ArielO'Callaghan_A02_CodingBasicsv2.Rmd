@@ -74,10 +74,10 @@ data.frame(Names, Testscores, Passedexam)
 ```{r}
 
 
-ifelse(Testscores>50, Testscores>50, Testscores>50)
+ifelse(Testscores>50, TRUE, FALSE)
 
+ifelse(Testscores<50, TRUE, FALSE)
 ```
-
 12. QUESTION: Which option of `if` and `else` vs. `ifelse` worked? Why?
 
-> Answer:
+> Answer:The following statement shows an output for when the condition is TRUE and when it’s false. The ifelse statement shows all test scores in the sequence for each individual depending on test scores. 
