@@ -57,20 +57,24 @@ median(sequence_100) #run median of sequence function
 ```{r}
 Names <- c("Ariel", "Josh", "Mike", "Erin") #Vector type Character
 Testscores <- c(85, 74, 92, 45) # Vector type number
-Passedexam <- c(TRUE, TRUE, TRUE, FALSE) # Vector type argument
+Passedexam <- c(TRUE, TRUE, TRUE, FALSE) #vector type Logical data type True if >50
 data.frame(Names, Testscores, Passedexam)
 
 ```
 
 9.  QUESTION: How is this data frame different from a matrix?
 
-> Answer:
+> Answer: Vectors are one dimensional structures that contain elements of the same type. Matrices are two dimensional structures that contain elements of the same type. This dataframe is more general then a matrix as different columns can have different nodes or datatypes. For example this dtaframe contains character, number and localical data and therefore cannot be a matix. 
+
 
 10. Create a function with an if/else statement. Your function should take a **vector** of test scores and print (not return) whether a given test score is a passing grade of 50 or above (TRUE or FALSE). You will need to choose either the `if` and `else` statements or the `ifelse` statement. 
 
 11. Apply your function to the vector with test scores that you created in number 5.
 
 ```{r}
+
+
+ifelse(Testscores>50, Testscores>50, Testscores>50)
 
 ```
 
