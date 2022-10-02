@@ -33,7 +33,7 @@ If your working directory is not set to the folder you want, you have several op
 
 ```{r Setting the working directory }
 # Absolute file path is commented out
-setwd("/home/guest/EDA-Fall2022")
+#setwd("/home/guest/EDA-Fall2022")
 ```
 
 You may change your working directory without coding by going to the Session menu in RStudio and navigating to the Set Working Directory tab. From there, you may select from a series of options to reset your working directory. 
@@ -117,7 +117,7 @@ Take a moment to read through the README file associated with the USGS dataset o
 > ANSWER: 
 
 ```{r Exploring data}
-View(USGS.flow.data)
+#View(USGS.flow.data)
 # Alternate option: click on data frame in Environment tab
 
 class(USGS.flow.data)
