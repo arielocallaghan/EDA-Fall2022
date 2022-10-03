@@ -1,7 +1,10 @@
 ---
-title: "Assignment 3: Data Exploration"
+title: 'Assignment 3: Data Exploration'
 author: "Ariel O'Callaghan"
-output: pdf_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 geometry: margin=2.54cm
 ---
 
@@ -42,6 +45,8 @@ knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 #install.packages("tidyverse")
 #install.packages("dplyr")
 library(ggplot2)
+#install.packages("lubridate")
+library(lubridate)
 #adding datasets needed for assingment
 
 Neonics.data <-read.csv("Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv", stringsAsFactors = TRUE)
@@ -164,9 +169,13 @@ ggplot(Neonics.data, aes(x=Endpoint)) +
 ```{r}
 #help("as.Date")
 #Litter.data <-read.csv("Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv", stringsAsFactors = TRUE)
-class(Litter.data$collectDate)
-Litter.data.datetime <- as.Date.factor(Litter.data$collectDate, format= "%Y/%m/%d")
-na.omit(Litter.data.datetime)
+class(Litter.data$collectDate) # checking current class
+Litter.data$collectDate <- c(ymd(Litter.data$collectDate)) #Changing to date format
+class(Litter.data$collectDate) #checking the changed class
+unique(Litter.data$collectDate)
+
+#Litter.data.datetime <- as.Date.factor(Litter.data$collectDate, format= "%Y/%m/%d") - Do not use
+#na.omit(Litter.data.datetime)
 #format(Litter.data$collectDate, format= "%Y/%m/%d") do not use
 #class(Litter.data.datetime$collectDate)
 ```
@@ -175,10 +184,11 @@ na.omit(Litter.data.datetime)
 
 ```{r}
 #help("unique")
-#unique(Litter.data, ("x=namedLocation, = TRUE"))
+#help(summary)
+unique(Litter.data$plotID)
 ```
 
-> Answer:
+> Answer:The uniuqe function returns a vector, data frame or array with dupliance elements/rows removed. The summary is a generic function which produces summaries of the various functions. 
 
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 
