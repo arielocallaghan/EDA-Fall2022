@@ -112,6 +112,7 @@ Now, call up the object `x`. Notice that `x` has also just shown up in your Envi
 
 ```{r}
 x
+
 ```
 
 ### Naming
@@ -129,6 +130,8 @@ What happens if there is a typo in your code? Type the following in the R window
 ```{r}
 long_name_for_illustration <- 11
 
+long_name_for_illustration
+
 ```
 
 ### Comments
@@ -139,6 +142,7 @@ Within your R code, it is often useful to include notes about your workflow. So 
 # I am demonstrating a comment here. 
 
 1 + 1 # This is a simple math problem
+# 1 + 1
 ```
 
 ### Functions
@@ -186,7 +190,7 @@ recipe2 <- function(x){
   mix1 <- x*2
   mix2 <- x/2
   return(list(mix1 = mix1, #comma indicates we continue onto the next line
-              mix2 = mix2))
+              mix2 = mix2)) 
 }
 
 doublesimplemeal <- recipe2(6)

@@ -103,6 +103,7 @@ An alternate to a histogram is a frequency polygon graph (distributions of value
 ```{r, fig.height = 3, fig.width = 4}
 #
 ggplot(USGS.flow.data) +
+  geom_histogram(aes(x = gage.height.mean), bins = 50) +
   geom_freqpoly(aes(x = gage.height.mean), bins = 50) +
   geom_freqpoly(aes(x = gage.height.min), bins = 50, color = "darkgray") +
   geom_freqpoly(aes(x = gage.height.max), bins = 50,  lty = 2) +
@@ -130,11 +131,13 @@ A box-and-whisker plot is yet another alternative to histograms (distributions o
 An alternate option is a violin plot, which displays density distributions, somewhat like a hybrid of the box-and-whiskers and the frequency polygon plot.
 
 ```{r, fig.height = 3, fig.width = 4}
-#
+# categorical and numeric data, lookin at distribution
 ggplot(USGS.flow.data) +
   geom_boxplot(aes(x = gage.height.mean.approval, y = gage.height.mean))
 
-#
+#low values of guage high tight distribution of disharge values. 
+#shows variance across distribution
+#analysis to histogram looking at distribution along slice of data
 ggplot(USGS.flow.data) +
   geom_boxplot(aes(x = gage.height.mean, y = discharge.mean, group = cut_width(gage.height.mean, 1)))
 
