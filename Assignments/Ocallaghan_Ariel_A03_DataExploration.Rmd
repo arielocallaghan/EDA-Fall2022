@@ -172,7 +172,7 @@ na.omit(Litter.data.datetime)
 
 ```{r}
 #help("unique")
-#unique(Litter.data, aes("x=namedLocation, = TRUE"))
+#unique(Litter.data, ("x=namedLocation, = TRUE"))
 ```
 
 > Answer:
@@ -180,8 +180,9 @@ na.omit(Litter.data.datetime)
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 
 ```{r}
-#ggplot(Litter.data) +
- # geom_violin(aes(x = functionalGroup)
+
+ggplot(Litter.data, aes(x =functionalGroup)) +
+  geom_bar()
 ```
 
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup.
