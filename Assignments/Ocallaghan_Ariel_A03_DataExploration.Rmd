@@ -46,6 +46,7 @@ knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 
 Neonics.data <-read.csv("Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv", stringsAsFactors = TRUE)
 Litter.data <-read.csv("Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv", stringsAsFactors = TRUE)
+
 str(Neonics.data$Effect)
 
 #Explore dataset
@@ -57,18 +58,18 @@ class(Neonics.data) #data.frame
 
 2.  The neonicotinoid dataset was collected from the Environmental Protection Agency's ECOTOX Knowledgebase, a database for ecotoxicology research. Neonicotinoids are a class of insecticides used widely in agriculture. The dataset that has been pulled includes all studies published on insects. Why might we be interested in the ecotoxicology of neonicotinoids on insects? Feel free to do a brief internet search if you feel you need more background information.
 
-> Answer:
+> Answer: This database provides information on adverse effects of single chemical stressors aquadic and terrestiral species. Inspect are important for polluation and food production and understanding stressors are important. 
 
 3.  The Niwot Ridge litter and woody debris dataset was collected from the National Ecological Observatory Network, which collectively includes 81 aquatic and terrestrial sites across 20 ecoclimatic domains. 32 of these sites sample forest litter and woody debris, and we will focus on the Niwot Ridge long-term ecological research (LTER) station in Colorado. Why might we be interested in studying litter and woody debris that falls to the ground in forests? Feel free to do a brief internet search if you feel you need more background information.
 
-> Answer:
+> Answer: Understanding forest litter and woody debris helps us better understand the health of our mountains. This monitoirng allows us to understand diverse ecosystems in multiplal spatial and temporral scales. It also helps better understand the biodiversity in our ecosystem. Litter and woody debris sampling help provides understanding about plans. 
 
 4.  How is litter and woody debris sampled as part of the NEON network? Read the NEON_Litterfall_UserGuide.pdf document to learn more. List three pieces of salient information about the sampling methods here:
 
 > Answer: 
- 1.
- 2.
- 3. 
+ 1.Litter and fine woody debris are collected from elevated ground traps
+ 2. Sampling desing ecompases spaital paramaters such as NEON sites with woody vegitation >2M. 
+ 3. Ground traps are sampled once per year and more frequenly depending on density of vegitation and forest. 
 
 ## Obtain basic summaries of your data (Neonics)
 
@@ -120,6 +121,7 @@ class(Neonics.data$Conc.1..Author.)
 9.  Using `geom_freqpoly`, generate a plot of the number of studies conducted by publication year.
 
 ```{r}
+
 ggplot(Neonics.data)+
   geom_freqpoly(aes(x = Publication.Year), bins=15)
 ggplot(Neonics.data)+
@@ -141,28 +143,43 @@ ggplot(Neonics.data)+
 
 Interpret this graph. What are the most common test locations, and do they differ over time?
 
-> Answer:
+> Answer: The most common testing locations are the labs and natural field. The lab testing only supparsed natral field around 2009 and beacame the most common test location. 
 
 11. Create a bar graph of Endpoint counts. What are the two most common end points, and how are they defined? Consult the ECOTOX_CodeAppendix for more information.
 
 ```{r}
+ggplot(Neonics.data, aes(x=Endpoint)) +
+  geom_bar() 
+  
+  
+#label_parsed(Endpoint, multi_line = TRUE) did not work try to space text on X axis
 
+count(Neonics.data$Endpoint) 
+# Error in UseMethod("count") : 
+  #no applicable method for 'count' applied to an object of class "factor"
 ```
 
-> Answer:
+> Answer:The two most common end points are LOEC and NEOL. 
 
 ## Explore your data (Litter)
 
 12. Determine the class of collectDate. Is it a date? If not, change to a date and confirm the new class of the variable. Using the `unique` function, determine which dates litter was sampled in August 2018.
 
 ```{r}
-
+#help("as.Date")
+#Litter.data <-read.csv("Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv", stringsAsFactors = TRUE)
+class(Litter.data$collectDate)
+Litter.data.datetime <- as.Date.factor(Litter.data$collectDate, format= "%Y/%m/%d")
+na.omit(Litter.data.datetime)
+#format(Litter.data$collectDate, format= "%Y/%m/%d") do not use
+#class(Litter.data.datetime$collectDate)
 ```
 
 13. Using the `unique` function, determine how many plots were sampled at Niwot Ridge. How is the information obtained from `unique` different from that obtained from `summary`?
 
 ```{r}
-
+#help("unique")
+unique(Litter.data, aes(x=Niwot Ridge))
 ```
 
 > Answer:
