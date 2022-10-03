@@ -113,7 +113,7 @@ EPAair.Ex3<-
   ggplot(EPAair, aes(x=PM2.5, y=Ozone))+
   geom_point(aes(color=meanlat),alpha=0.5)+
   geom_smooth(method = lm, color="red")+
-  ylab(expression("0"[3] "AQI Value"))
+  ylab(expression("0"[3]* "AQI Value"))
 print(EPAair.Ex3)
 
 
