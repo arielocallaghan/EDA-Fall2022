@@ -29,6 +29,9 @@ The completed exercise is due on Sept 30th.
 #setwd("/home/guest/R/EDA-Fall2022) 
 #change wd from assingments to main eda folder
 
+#install.packages("tinytex")
+#tinytex::install_tinytex()
+
 #Allow for code and comments to not run off page when knitting file. Note- add to top of every rmd
 
 #install.packages('formatR')
