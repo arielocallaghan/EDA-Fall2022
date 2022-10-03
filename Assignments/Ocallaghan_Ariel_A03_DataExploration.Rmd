@@ -31,14 +31,14 @@ The completed exercise is due on Sept 30th.
 
 #Allow for code and comments to not run off page when knitting file. Note- add to top of every rmd
 
-
+#install.packages('formatR')
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 
-#install.packages('formatR')
+
 #installing necessary packages, one installed add # to knit assignment 
 #install.packages("tidyverse")
-#install.packages(dplyr)
-
+#install.packages("dplyr")
+library(ggplot2)
 #adding datasets needed for assingment
 
 Neonics.data <-read.csv("Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv", stringsAsFactors = TRUE)
@@ -118,7 +118,6 @@ class(Neonics.data$Conc.1..Author.)
 9.  Using `geom_freqpoly`, generate a plot of the number of studies conducted by publication year.
 
 ```{r}
-
 ggplot(Neonics.data)+
   geom_freqpoly(aes(x = Publication.Year), bins=15)
 ggplot(Neonics.data)+
@@ -151,9 +150,6 @@ ggplot(Neonics.data, aes(x=Endpoint)) +
   
 #label_parsed(Endpoint, multi_line = TRUE) did not work try to space text on X axis
 
-count(Neonics.data$Endpoint) 
-# Error in UseMethod("count") : 
-  #no applicable method for 'count' applied to an object of class "factor"
 ```
 
 > Answer:The two most common end points are LOEC and NEOL. 
@@ -176,7 +172,7 @@ na.omit(Litter.data.datetime)
 
 ```{r}
 #help("unique")
-unique(Litter.data, aes("x=namedLocation, =TRUE")
+#unique(Litter.data, aes("x=namedLocation, = TRUE"))
 ```
 
 > Answer:
@@ -184,8 +180,8 @@ unique(Litter.data, aes("x=namedLocation, =TRUE")
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 
 ```{r}
-ggplot(Litter.data) +
-  geom_violin(aes(x = functionalGroup)
+#ggplot(Litter.data) +
+ # geom_violin(aes(x = functionalGroup)
 ```
 
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup.
