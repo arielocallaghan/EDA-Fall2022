@@ -7,7 +7,7 @@ geometry: margin=2.54cm
 
 ## OVERVIEW
 
-This exercise accompanies the lessons in Environmental Data Analytics on Data Exploration.
+#This exercise accompanies the lessons in Environmental Data Analytics on Data Exploration.
 
 ## Directions
 
@@ -25,21 +25,18 @@ The completed exercise is due on Sept 30th.
 1.  Check your working directory, load necessary packages (tidyverse), and upload two datasets: the ECOTOX neonicotinoid dataset (ECOTOX_Neonicotinoids_Insects_raw.csv) and the Niwot Ridge NEON dataset for litter and woody debris (NEON_NIWO_Litter_massdata_2018-08_raw.csv). Name these datasets "Neonics" and "Litter", respectively. Be sure to include the subcommand to read strings in as factors.
 
 ```{r,  message = FALSE}
-#steup r steps below
-getwd()
-setwd("/home/guest/R/EDA-Fall2022) 
+
+#setwd("/home/guest/R/EDA-Fall2022) 
 #change wd from assingments to main eda folder
 
 #Allow for code and comments to not run off page when knitting file. Note- add to top of every rmd
 
-{r setup, include=FALSE}
-
-#install.packages('formatR')
 
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 
+#install.packages('formatR')
 #installing necessary packages, one installed add # to knit assignment 
-#install.packages(tidyverse)
+#install.packages("tidyverse")
 #install.packages(dplyr)
 
 #adding datasets needed for assingment
@@ -47,11 +44,11 @@ knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 Neonics.data <-read.csv("Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv", stringsAsFactors = TRUE)
 Litter.data <-read.csv("Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv", stringsAsFactors = TRUE)
 
-str(Neonics.data$Effect)
+#str(Neonics.data$Effect)
 
 #Explore dataset
-View(Neonics.data) 
-class(Neonics.data) #data.frame
+#View(Neonics.data) 
+#class(Neonics.data) #data.frame
 ```
 
 ## Learn about your system
@@ -105,7 +102,7 @@ summary(Neonics.data$Species.Common.Name)
 ```
 
 > Answer:
-The most common are Honey Bee, Parasitic Wasp, Buff Tailed Bumblebee, Carniolan Honey Bee, Bumble Bee, and Italian Honeybee. 
+The most common are Honey Bee, Parasitic Wasp, Buff Tailed Bumblebee, Carniolan Honey Bee, Bumble Bee, and Italian Honeybee. Most of the top insects sudied are bees which are pollnators and a keystone species for our food production. 
 
 8.  Concentrations are always a numeric value. What is the class of Conc.1..Author. in the dataset, and why is it not numeric?
 
@@ -114,7 +111,7 @@ class(Neonics.data$Conc.1..Author.)
 
 ```
 
-> Answer:The  class(Neonics.data$Conc.1..Author.) shows up as "factor" because XXXXXXXXX
+> Answer:The  class(Neonics.data$Conc.1..Author.) shows up as "factor" because it is not a numerical data set with continuous or descrete values. This column is a categorical dataset. 
 
 ## Explore your data graphically (Neonics)
 
@@ -179,7 +176,7 @@ na.omit(Litter.data.datetime)
 
 ```{r}
 #help("unique")
-unique(Litter.data, aes(x=Niwot Ridge))
+unique(Litter.data, aes("x=namedLocation, =TRUE")
 ```
 
 > Answer:
@@ -187,19 +184,25 @@ unique(Litter.data, aes(x=Niwot Ridge))
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 
 ```{r}
-
+ggplot(Litter.data) +
+  geom_violin(aes(x = functionalGroup)
 ```
 
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup.
 
 ```{r}
+ggplot(Litter.data) +
+  geom_boxplot(aes(x = dryMass, y = functionalGroup))
+
+ggplot(Litter.data) +
+  geom_violin(aes(x = dryMass, y = functionalGroup), draw_quantiles = c(0.25, 0.5, 0.75)) 
 
 ```
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
 
-> Answer:
+> Answer:The boxplot allows you to see the were the majority of the groupings are for the functional groups by drymass but also the outliners. The violin plots which display density distribution are not as effective. 
 
 What type(s) of litter tend to have the highest biomass at these sites?
 
-> Answer:
+> Answer:Needles have the highest biopass at these sights. 
