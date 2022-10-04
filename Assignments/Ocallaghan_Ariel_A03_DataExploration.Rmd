@@ -2,9 +2,9 @@
 title: 'Assignment 3: Data Exploration'
 author: "Ariel O'Callaghan"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 geometry: margin=2.54cm
 ---
 
