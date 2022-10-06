@@ -22,8 +22,9 @@ Why is data exploration our first step in analyzing a dataset? What information 
 ## Import data and view summaries
 
 ```{r, message = FALSE}
-# 1. Set up your working directory
-getwd()
+
+#1. Set up your working directory
+#getwd()
 
 # 2. Load packages
 library(tidyverse)
