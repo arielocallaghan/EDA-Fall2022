@@ -8,8 +8,7 @@ geometry: margin=2.54cm
 ```{r setup, include=FALSE}
 #This code chunk will tidy your knit PDF files, wrapping long code lines
 #For it to work, the "formatR" package needs to be installed
-setwd()
-getwd()
+
 install.packages('formatR')
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 
@@ -18,7 +17,14 @@ library(tidyverse)
 install.packages("lubridate")
 library(lubridate)
 
+setwd("~/R/EDA-Fall2022")
+epa.o3.2018.data <- read.csv("./Data/Raw/EPAair_O3_NC2019_raw.csv", stringsAsFactors = TRUE)
 
+setwd("~/R/EDA-Fall2022")
+epa.o3.2019.data <- read.csv("./Data/Raw/EpAair_O3_NC2018_raw.csv", stringsAsFactors = TRUE)
+
+epa.PM25.2018.data <- read.csv("./Data/Raw/EpAair_PM25_NC2018.raw.csv", stringsAsFactors = TRUE)
+epa.PM25.2019.data <- read.csv("./Data/Raw/EpAair_PM25_NC2019.raw.csv", stringsAsFactors = TRUE)
 ```
 
 ## OVERVIEW
