@@ -136,15 +136,17 @@ epa.air.all.pipe<-
   summarise(meanAQI= mean(DAILY_AQI_VALUE),
             meanLAT = mean(SITE_LATITUDE),
             meanLON = mean(SITE_LONGITUDE)) %>% 
-  mutate(Month = month(Date), year(Date))
+  mutate(Month = month(Date),Year = year(Date))
   
 dim(epa.air.all.pipe)
 #9
-epa.air.all.pipe <- pivot_longer(epa.air.all.pipe, names_to = AQS_PARAMETER_DESC, value)
+epa.air.all.pipe.spread <- pivot_wider(epa.air.all.pipe, names_from = AQS_PARAMETER_DESC, values_from =meanAQI)
+
 #10
+dim(epa.air.all.pipe.spread)
 
 #11
-
+write.csv(epa.air.all.pipe.spread, row.names = FALSE, file = "./Data/Processed/epa_air_all_pipe_processed.csv")
 ```
 
 
@@ -154,8 +156,9 @@ epa.air.all.pipe <- pivot_longer(epa.air.all.pipe, names_to = AQS_PARAMETER_DESC
 13. Call up the dimensions of the summary dataset.
 
 ```{r}
+
 #12a
-#class(epa.final$ozone)
+epa.air.all.pipe.spread.summary <- epa.air.all.pipe.spread %>% group_by(Site.Name,Month,Year)
 
 #12b
 #EPA.summaries <- epa.final %>%
