@@ -75,18 +75,11 @@ class(epa.03.nc2019.data$Date)
 class(epa.PM25.nc2018.data$Date)
 class(epa.PM25.nc2018.data$Date)
 
-epa.03.nc2018.data.datecorrect <- as.Date(epa.PM25.nc2018.data$Date, format = "%m/%d/%y")
-head(epa.03.nc2018.data.datecorrect)
 
-
-epa.03.nc2019.data.datecorrect <- as.Date(epa.03.nc2019.data$Date, format = "%m/%d/%y")
-head(epa.03.nc2019.data.datecorrect) 
-
-epa.PM25.nc2018.data.datecorrect <- as.Date(epa.PM25.nc2018.data$Date, format = "%m/%d/%y")
-head(epa.PM25.nc2018.data.datecorrect) 
-
-epa.PM25.nc2019.data.datecorrect <- as.Date(epa.PM25.nc2019.data$Date, format = "%m/%d/%y")
-head(epa.PM25.nc2019.data.datecorrect)
+epa.03.nc2018.data$Date <- c(mdy(epa.03.nc2018.data$Date))
+epa.03.nc2019.data$Date <- c(mdy(epa.03.nc2019.data$Date))
+epa.PM25.nc2018.data$Date <- c(mdy(epa.PM25.nc2018.data$Date))
+epa.PM25.nc2019.data$Date <- c(mdy(epa.PM25.nc2019.data$Date))
 
 #4 select tool for columns
 
@@ -103,7 +96,7 @@ epa.PM25.nc2019.subset <- select(epa.PM25.nc2019.data, Date, DAILY_AQI_VALUE, Si
 colnames(epa.PM25.nc2019.subset)
 
 #5
-epa.PM25.nc2019.subset$AQS_PARAMATER_DECS <- "PM2.5"
+epa.PM25.nc2019.subset$AQS_PARAMETER_DESC <- "PM2.5"
 epa.PM25.nc2018.subset$AQS_PARAMETER_DESC <-"PM2.5"
 
 #6
@@ -131,13 +124,23 @@ write.csv(epa.PM25.nc2019.subset, row.names = FALSE, file = "./Data/Processed/ep
 11. Save your processed dataset with the following file name: "EPAair_O3_PM25_NC1718_Processed.csv"
 
 ```{r}
-#7
+#7 combined new dataset is epa.air.all
+
+epa.air.all <- rbind(epa.PM25.nc2019.subset, epa.PM25.nc2018.subset, epa.03.nc2019.data.subset, epa.PM25.nc2018.subset)
 
 #8
-#filename <-
-filenamecombined
+epa.air.all.pipe<-
+  epa.air.all %>%
+  filter(Site.Name %in% c("Linville Falls", "Durham Armory", "Leggett", "Hattie Avenue", "Clemmons Middle", "Mendenhall School", "Frying Pan Mountain", "West Johnston Co.", "Garinger High School", "Castle Hayne", "Pitt Agri. Center", "Bryson City", "Millbrook School"))%>%
+  group_by(Date,Site.Name,AQS_PARAMETER_DESC,COUNTY) %>%
+  summarise(meanAQI= mean(DAILY_AQI_VALUE),
+            meanLAT = mean(SITE_LATITUDE),
+            meanLON = mean(SITE_LONGITUDE)) %>% 
+  mutate(Month = month(Date), year(Date))
+  
+dim(epa.air.all.pipe)
 #9
-
+epa.air.all.pipe <- pivot_longer(epa.air.all.pipe, names_to = AQS_PARAMETER_DESC, value)
 #10
 
 #11
@@ -160,7 +163,7 @@ filenamecombined
   summarise(meanPM2.5 = mean(PM2.5),
             meanozone = mean(ozone))
 #13
-
+dim()
 ```
 
 14. Why did we use the function `drop_na` rather than `na.omit`?
