@@ -12,19 +12,7 @@ geometry: margin=2.54cm
 install.packages('formatR')
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 
-install.packages("tidyverse")
-library(tidyverse)
-install.packages("lubridate")
-library(lubridate)
 
-setwd("~/R/EDA-Fall2022")
-epa.o3.2018.data <- read.csv("./Data/Raw/EPAair_O3_NC2019_raw.csv", stringsAsFactors = TRUE)
-
-setwd("~/R/EDA-Fall2022")
-epa.o3.2019.data <- read.csv("./Data/Raw/EpAair_O3_NC2018_raw.csv", stringsAsFactors = TRUE)
-
-epa.PM25.2018.data <- read.csv("./Data/Raw/EpAair_PM25_NC2018.raw.csv", stringsAsFactors = TRUE)
-epa.PM25.2019.data <- read.csv("./Data/Raw/EpAair_PM25_NC2019.raw.csv", stringsAsFactors = TRUE)
 ```
 
 ## OVERVIEW
@@ -47,8 +35,31 @@ The completed exercise is due on Friday, Oct7th @ 5:00pm.
 
 ```{r, message = FALSE}
 #1
+getwd()
+#install.packages("tidyverse")
+library(tidyverse)
+#install.packages("lubridate")
+library(lubridate)
+
+epa.03.nc2018.data <- read.csv("./Data/Raw/EPAair_O3_NC2018_raw.csv", stringsAsFactors = TRUE)
+epa.03.nc2019.data <- read.csv("./Data/Raw/EPAair_O3_NC2019_raw.csv", stringsAsFactors = TRUE)
+epa.PM25.nc2018.data <- read.csv("./Data/Raw/EPAair_PM25_NC2018_raw.csv", stringsAsFactors = TRUE)
+epa.PM25.nc2019.data <- read.csv("./Data/Raw/EPAair_PM25_NC2019_raw.csv", stringsAsFactors = TRUE)
 
 #2
+colnames(epa.PM25.nc2019.data)
+colnames(epa.PM25.nc2018.data)
+colnames(epa.03.nc2018.data)
+colnames(epa.03.nc2019.data)
+str(epa.PM25.nc2019.data)
+str(epa.PM25.nc2018.data)
+str(epa.03.nc2019.data)
+str(epa.03.nc2018.data)
+dim(epa.PM25.nc2019.data)
+dim(epa.PM25.nc2018.data)
+dim(epa.03.nc2019.data)
+dim(epa.03.nc2018.data)
+
 ```
 
 ## Wrangle individual datasets to create processed files.
@@ -58,14 +69,51 @@ The completed exercise is due on Friday, Oct7th @ 5:00pm.
 6. Save all four processed datasets in the Processed folder. Use the same file names as the raw files but replace "raw" with "processed".
 
 ```{r}
-#3
+#3 All currently show up as factors
+class(epa.03.nc2018.data$Date)
+class(epa.03.nc2019.data$Date)
+class(epa.PM25.nc2018.data$Date)
+class(epa.PM25.nc2018.data$Date)
 
-#4
+epa.03.nc2018.data.datecorrect <- as.Date(epa.PM25.nc2018.data$Date, format = "%m/%d/%y")
+head(epa.03.nc2018.data.datecorrect)
+
+
+epa.03.nc2019.data.datecorrect <- as.Date(epa.03.nc2019.data$Date, format = "%m/%d/%y")
+head(epa.03.nc2019.data.datecorrect) 
+
+epa.PM25.nc2018.data.datecorrect <- as.Date(epa.PM25.nc2018.data$Date, format = "%m/%d/%y")
+head(epa.PM25.nc2018.data.datecorrect) 
+
+epa.PM25.nc2019.data.datecorrect <- as.Date(epa.PM25.nc2019.data$Date, format = "%m/%d/%y")
+head(epa.PM25.nc2019.data.datecorrect)
+
+#4 select tool for columns
+
+epa.03.nc2018.data.subset <- select(epa.03.nc2018.data, Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+colnames(epa.03.nc2018.data.subset) #check for select function
+
+epa.03.nc2019.data.subset <- select(epa.03.nc2019.data, Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+colnames(epa.03.nc2019.data.subset)
+
+epa.PM25.nc2018.subset <- select(epa.PM25.nc2018.data, Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+colnames(epa.PM25.nc2018.subset)
+
+epa.PM25.nc2019.subset <- select(epa.PM25.nc2019.data, Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+colnames(epa.PM25.nc2019.subset)
 
 #5
+epa.PM25.nc2019.subset$AQS_PARAMATER_DECS <- "PM2.5"
+epa.PM25.nc2018.subset$AQS_PARAMETER_DESC <-"PM2.5"
 
 #6
+write.csv(epa.03.nc2018.data.subset, row.names = FALSE, file = "./Data/Processed/epa_O3_nc_2018_processed.csv")
 
+write.csv(epa.03.nc2019.data.subset, row.names = FALSE, file = "./Data/Processed/epa_O3_nc_2019_processed.csv")
+
+write.csv(epa.PM25.nc2018.subset, row.names = FALSE, file = "./Data/Processed/epa_PM25_nc_2018_processed.csv")
+
+write.csv(epa.PM25.nc2019.subset, row.names = FALSE, file = "./Data/Processed/epa_PM25_nc_2019_processed.csv")
 ```
 
 
@@ -86,7 +134,8 @@ The completed exercise is due on Friday, Oct7th @ 5:00pm.
 #7
 
 #8
-
+#filename <-
+filenamecombined
 #9
 
 #10
@@ -103,9 +152,13 @@ The completed exercise is due on Friday, Oct7th @ 5:00pm.
 
 ```{r}
 #12a
+#class(epa.final$ozone)
 
 #12b
-
+#EPA.summaries <- epa.final %>%
+  group_by(Site.Name, Month, Year) %>%
+  summarise(meanPM2.5 = mean(PM2.5),
+            meanozone = mean(ozone))
 #13
 
 ```
