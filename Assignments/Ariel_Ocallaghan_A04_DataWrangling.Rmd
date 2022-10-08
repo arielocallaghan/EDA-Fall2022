@@ -10,7 +10,7 @@ geometry: margin=2.54cm
 #For it to work, the "formatR" package needs to be installed
 
 install.packages('formatR')
-knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=45), tidy=TRUE)
 
 
 ```
@@ -157,9 +157,9 @@ write.csv(epa.air.all.pipe.spread, row.names = FALSE, file = "./Data/Processed/e
 
 ```{r}
 #12a
-#epa.air.all.pipe.spread.summary <- epa.air.all.pipe.spread %>% 
-  #group_by(Site.Name,Month,Year) %>% 
-  #summarise(Ozonemean = mean(Ozone), PM2.5mean = mean(PM2.5)) %>% 
+epa.air.all.pipe.spread.summary <- epa.air.all.pipe.spread %>% 
+  group_by(Site.Name,Month,Year) %>% 
+  summarise(Ozonemean = mean(Ozone), PM2.5mean = mean(PM2.5))
   
 epa.air.all.pipe.spread.summary2 <- epa.air.all.pipe.spread %>% 
   group_by(Site.Name,Month,Year) %>% 
@@ -169,7 +169,7 @@ epa.air.all.pipe.spread.summary2 <- epa.air.all.pipe.spread %>%
 
 
 #13
-#dim(epa.air.all.pipe.spread.summary)
+dim(epa.air.all.pipe.spread.summary)
 dim(epa.air.all.pipe.spread.summary2)
 ```
 
