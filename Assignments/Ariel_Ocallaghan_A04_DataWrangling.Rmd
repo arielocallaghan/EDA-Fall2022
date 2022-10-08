@@ -156,19 +156,24 @@ write.csv(epa.air.all.pipe.spread, row.names = FALSE, file = "./Data/Processed/e
 13. Call up the dimensions of the summary dataset.
 
 ```{r}
-
 #12a
-epa.air.all.pipe.spread.summary <- epa.air.all.pipe.spread %>% group_by(Site.Name,Month,Year)
+#epa.air.all.pipe.spread.summary <- epa.air.all.pipe.spread %>% 
+  #group_by(Site.Name,Month,Year) %>% 
+  #summarise(Ozonemean = mean(Ozone), PM2.5mean = mean(PM2.5)) %>% 
+  
+epa.air.all.pipe.spread.summary2 <- epa.air.all.pipe.spread %>% 
+  group_by(Site.Name,Month,Year) %>% 
+  drop_na(PM2.5) %>% 
+  drop_na(Ozone)
 
-#12b
-#EPA.summaries <- epa.final %>%
-  group_by(Site.Name, Month, Year) %>%
-  summarise(meanPM2.5 = mean(PM2.5),
-            meanozone = mean(ozone))
+
+
 #13
-dim()
+#dim(epa.air.all.pipe.spread.summary)
+dim(epa.air.all.pipe.spread.summary2)
 ```
 
 14. Why did we use the function `drop_na` rather than `na.omit`?
 
 > Answer: 
+drop NA drops rows keeps only complete rows where there are no missing values. Na.omit returns objects with incomplete cases removed. We utlized drop na because we wanted to remove instances where month and year were not avilable. 
