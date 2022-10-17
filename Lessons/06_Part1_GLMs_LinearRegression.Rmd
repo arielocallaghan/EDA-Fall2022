@@ -43,7 +43,7 @@ getwd()
 library(tidyverse)
 options(scipen = 4)
 
-PeterPaul.chem.nutrients <- read.csv("./Data_2022sp/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
+PeterPaul.chem.nutrients <- read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
 
 # Set theme
 mytheme <- theme_classic(base_size = 14) +
