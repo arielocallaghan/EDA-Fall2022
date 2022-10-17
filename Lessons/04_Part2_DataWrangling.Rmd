@@ -1,5 +1,5 @@
 ---
-title: "4: Part 2 - Data Wrangling"
+title: "4: Part 2 - Data Wrangling- Ariel"
 author: "Environmental Data Analytics | John Fay and Luana Lima | Developed by Kateri Salk"
 date: "Fall 2022"
 output: pdf_document
@@ -16,7 +16,7 @@ editor_options:
 ## Set up your session
 
 ```{r, message = FALSE}
-getwd()
+#getwd()
 #library(plyr)
 library(tidyverse)
 library(lubridate)
