@@ -157,9 +157,9 @@ nationalparkcolors (package)
 * https://github.com/katiejolly/nationalparkcolors
 
 ```{r, warning = FALSE}
-# install.packages("viridis")
-# install.packages("RColorBrewer")
-# install.packages("colormap")
+install.packages("viridis")
+install.packages("RColorBrewer")
+install.packages("colormap")
 library(viridis)
 library(RColorBrewer)
 library(colormap)
