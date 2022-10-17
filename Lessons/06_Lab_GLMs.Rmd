@@ -1,5 +1,5 @@
 ---
-title: "6: Part 1 - Generalized Linear Models"
+title: "6: Part 1 - Generalized Linear Models-Ariel"
 author: "Environmental Data Analytics | John Fay and Luana Lima | Developed by Kateri Salk"
 date: "Fall 2022"
 output: pdf_document
