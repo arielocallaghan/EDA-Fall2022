@@ -39,7 +39,7 @@ the processed data file for the Niwot Ridge litter dataset (use the
 2. Make sure R is reading dates as date format; if not change the format to date.
 
 ```{r}
-#1 
+#1
 getwd()
 install.packages("tidyverse")
 install.packages("lubridate")
