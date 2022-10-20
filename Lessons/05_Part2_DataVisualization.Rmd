@@ -9,7 +9,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-#install.packages('formatR')
+install.packages('formatR')
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 ```
 
@@ -39,7 +39,7 @@ PeterPaul.chem.nutrients.gathered$sampledate <- as.Date(
 
 
 ### Themes
-Often, we will want to change multiple visual aspects of a plot. Ggplot comes with pre-built themes that will adjust components of plots if you call that theme. 
+Often, we will want to change multiple visual aspects of a plot. Ggplot comes with pre-built themes that will adjust components of plots if you call that theme. where legends should go set these for graphs
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
 O3plot <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) 
@@ -47,9 +47,10 @@ print(O3plot)
 
 O3plot1 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
-  theme_gray()
+  theme_gray() #default ggi plot theme
 print(O3plot1)
 
+#theme bw - is dark on white theme- background white
 O3plot2 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
   theme_bw()
@@ -57,12 +58,12 @@ print(O3plot2)
 
 O3plot3 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
-  theme_light()
+  theme_light() #background is white - grey axis lines
 print(O3plot3)
 
 O3plot4 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
-  theme_classic()
+  theme_classic() #no gridlines x and y axis lines
 print(O3plot4)
 ```
 
@@ -75,18 +76,18 @@ Notice that some aspects of your graph have not been adjusted, including:
 If you would like to set a common theme across all plots in your analysis session, you may define a theme and call up that theme for each graph. This eliminates the need to add multiple lines of code in each plot. 
 
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
-mytheme <- theme_classic(base_size = 14) +
-  theme(axis.text = element_text(color = "black"), 
+mytheme <- theme_classic(base_size = 14) + #define theme - call you theme - 
+  theme(axis.text = element_text(color = "black"), #change axis text and legend position top
         legend.position = "top") #alternative: legend.position + legend.justification
 
 # options: call the theme in each plot or set the theme at the start. 
 
 O3plot5 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
-  mytheme
+  mytheme #setting theme using plot environment from code above 
 print(O3plot5)  
 
-theme_set(mytheme)
+theme_set(mytheme) #set theme for all subsequent plots 
 
 O3plot6 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone))
@@ -100,17 +101,18 @@ While the theme allows us to set multiple aspects of plots, ggplot allows us to 
 
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
 O3plot7 <- ggplot(EPAair, aes(x = Date, y = Ozone)) +
-  geom_hline(yintercept = 50, lty = 2) +
-  geom_hline(yintercept = 100, lty = 2) +
-  geom_point(alpha = 0.5, size = 1.5) +
-  geom_text(x = as.Date("2020-01-01"), y = 45, label = "good", hjust = 1, fontface = "bold") +   # hjust = 1 means left align
-  geom_text(x = as.Date("2020-01-01"), y = 95, label = "moderate", hjust = 1, fontface = "bold") +
-  geom_text(x = as.Date("2020-01-01"), y = 120, label = "unhealthy (sensitive groups)", hjust = 1, fontface = "bold") +
-  scale_x_date(limits = as.Date(c("2018-01-01", "2019-12-31")), 
-    date_breaks = "2 months", date_labels = "%b %y") +
+  geom_hline(yintercept = 50, lty = 2) + #lyt speciffy type of line - dashed line
+  geom_hline(yintercept = 100, lty = 2) + #another horizontal line at point 100
+  geom_point(alpha = 0.5, size = 1.5) + #add points representing data set - alpha determine transparacty and size - not changing shape. 
+  geom_text(x = as.Date("2020-01-01"), y = 45, label = "good", hjust = 1, fontface = "bold") +   # hjust = 1 means left align - margin you want to consider - write out where text is - label is what text you want printed out. font face- text = bold
+  geom_text(x = as.Date("2020-01-01"), y = 95, label = "moderate", hjust = 1, fontface = "bold") + #moderate now changing where on y axis it shows up
+  geom_text(x = as.Date("2020-01-01"), y = 120, label = "unhealthy (sensitive groups)", hjust = 1, fontface = "bold") + #
+  scale_x_date(limits = as.Date(c("2018-01-01", "2019-12-31")),  #change scale on x asis 
+    date_breaks = "2 months", date_labels = "%b %y") + #month labels number of didgets that appear
   ylab(expression("O"[3]* " AQI Value")) +
-  theme(axis.text.x = element_text(angle = 45,  hjust = 1))
+  theme(axis.text.x = element_text(angle = 45,  hjust = 1)) #so text on axis does not oerlap
 print(O3plot7)  
+
 
 ```
 
@@ -164,10 +166,11 @@ library(viridis)
 library(RColorBrewer)
 library(colormap)
 
+# looks at color maps and different shades 
 scales::show_col(colormap(colormap = colormaps$viridis, nshades = 16))
 scales::show_col(colormap(colormap = colormaps$inferno, nshades = 16))
 scales::show_col(colormap(colormap = colormaps$magma, nshades = 16))
-display.brewer.all(n = 9)
+display.brewer.all(n = 9) #display all colors 
 
 NvsP <-
   ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = tn_ug, color = depth, shape = lakename)) +
@@ -179,8 +182,8 @@ print(NvsP)
 # change your legend labels
 NvsP2 <-
   ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = tn_ug, color = depth, shape = lakename)) +
-  geom_point(alpha = 0.7, size = 2.5) +
-  #labs() + # change your legend labels here
+  geom_point(alpha = 0.7, size = 2.5) + #add some transparency to the points 
+  labs(color="depth", shape="lake name") + # change your legend labels here
   scale_shape_manual(values = c(15, 17)) +
   #scale_color_distiller(palette = "Blues", direction = 1) + # use scale_color_brewer for discrete variables
   scale_color_viridis(option = "magma", direction = -1) +
@@ -215,6 +218,8 @@ A useful guide for aligning plots by axis can be found here: https://wilkelab.or
 library(cowplot)
 plot_grid(NvsP2, Nutrientplot, nrow = 2, align = 'h', rel_heights = c(1.25, 1))
 
+#plot grid allows you to have multiple plots in same window. specify how many rows with how many plots. 2 plots 
+#rel_height adjustes space of plots have in window- one plot may need more space 
 ```
 
 ### Saving plots

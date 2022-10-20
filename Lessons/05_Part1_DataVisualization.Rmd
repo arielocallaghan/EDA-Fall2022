@@ -192,14 +192,15 @@ Nutrientplot4 <-
                stackdir = "center", position = "dodge", dotsize = 2) #
 print(Nutrientplot4)
 
-# Violin plot
+# Violin plot - also shows you density plot. 
 Nutrientplot5 <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(x = lakename, y = concentration)) +
   geom_violin(aes(color = nutrient)) #
 print(Nutrientplot5)
 
-# Frequency polygons
-# Using a tidy dataset
+# Frequency polygons - vairable on x axis. color for each frequency polygon
+# Using a tidy dataset - not using gathered dataset anymore
+# no legend - not a good way to display this type of data- code not easy
 Nutrientplot6 <-
   ggplot(PeterPaul.chem.nutrients) +
   geom_freqpoly(aes(x = tn_ug), color = "darkred") +
@@ -209,7 +210,7 @@ Nutrientplot6 <-
   geom_freqpoly(aes(x = po4), color = "red") 
 print(Nutrientplot6)
 
-# Using a gathered dataset
+# Using a gathered dataset # x as concentration and catgrize as nutireints. color inside aes adds legend 
 Nutrientplot7 <-   
   ggplot(PeterPaul.chem.nutrients.gathered) +
   geom_freqpoly(aes(x = concentration, color = nutrient))
@@ -218,7 +219,8 @@ print(Nutrientplot7)
 # Frequency polygons have the risk of becoming spaghetti plots. 
 # See <https://www.data-to-viz.com/caveat/spaghetti.html> for more info.
 
-# Ridgeline plot
+# Ridgeline plot - will show density of distribution over time - category y by nutrients and one ridge plot by lake 
+# fill was used to fill beflow the frequency plot. # color = lake name would have one line of each color 
 Nutrientplot6 <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(y = nutrient, x = concentration)) +
   geom_density_ridges(aes(fill = lakename), alpha = 0.5) #
