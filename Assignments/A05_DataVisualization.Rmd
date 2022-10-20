@@ -1,5 +1,5 @@
 ---
-title: "Assignment 5: Data Visualization"
+title: "Ariel OCallaghan Assignment 5: Data Visualization"
 author: "Ariel O'Callaghan"
 output: pdf_document
 geometry: margin=2.54cm
@@ -44,24 +44,43 @@ getwd()
 install.packages("tidyverse")
 install.packages("lubridate")
 install.packages("cowplot")
+#themes
+install.packages("viridis")
+install.packages("RColorBrewer")
+install.packages("colormap")
 
 library(tidyverse)
 library(lubridate)
 library(cowplot)
+
+library(viridis)
+library(RColorBrewer)
+library(colormap)
 
 NTL.LTER.chem.nutrients <- 
   read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
 NEON.litter.mass <- 
   read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv", stringsAsFactors = TRUE)
 #2 
+#capital "Y" and lowercase "y" mean different things. In this case the year was fully written out "2018" so you needed to use capital "Y". The use of lowercase "y" tells your code the last two digits of the year are given so it would incorrectly interpret the year to be "20" thus 2020 instead of 2018.
+#A quick way to change the entire contents of a column is by doing dataframe$column <- "value" 
+NEON.litter.mass$collectDate <- as.Date(NEON.litter.mass$collectDate, format = "%Y-%m-%d")
+factor(NEON.litter.mass$collectDate)
+class(NEON.litter.mass$collectDate)
 
+NTL.LTER.chem.nutrients$sampledate <- as.Date(NTL.LTER.chem.nutrients$sampledate, format = "%Y-%m-%d")
+class(NTL.LTER.chem.nutrients$sampledate)
 ```
 ## Define your theme
 3. Build a theme and set it as your default theme.
 
-```{r}
+```{r, fig.height = 3, fig.width = 4, warning = FALSE}
 #3
+mytheme <- theme_classic(base_size = 14) + 
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
 
+theme_set(mytheme) #set theme for all subsequent plots 
 ```
 
 ## Create graphs
