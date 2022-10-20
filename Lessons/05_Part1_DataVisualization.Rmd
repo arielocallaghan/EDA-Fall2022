@@ -10,7 +10,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 #install.packages('formatR')
-knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50), tidy=TRUE)
 ```
 
 ## Objectives
@@ -81,8 +81,8 @@ Here are some commonly used aesthetic types that can be manipulated in ggplot:
 
 ### Plotting continuous variables over time: Scatterplot and Line Plot
 
-```{r, fig.height = 3, fig.width = 4, warning = FALSE}
-# Scatterplot
+```{r, fig.height = 3, fig.width = 4, warning = FALSE} 
+# Scatterplot #the line above will apply that to the entire R code chunk
 ggplot(EPAair, aes(x = Date, y = Ozone)) + 
   geom_point()
 
@@ -92,17 +92,18 @@ print(O3plot)
 
 # Fix this code
 O3plot2 <- ggplot(EPAair) +
-  geom_point(aes(x = Date, y = Ozone, color = "blue"))
+  geom_point(aes(x = Date, y = Ozone, color = "blue")) # you do not want the aes function with color in the
+  geom_point(aes(x = Date, y = Ozone), color = "blue") # this line is corect 
 print(O3plot2)
 
 # Add additional variables
-# How could you automatically assign a marker color to a variable? 
+# How could you automatically assign a marker color to a variable? All colors from the same sight will have the same color. GGI will automitally sign a marker plot color to each thing. 
 PMplot <- 
   ggplot(EPAair, aes(x = Month, y = PM2.5, shape = as.factor(Year), color = Site.Name)) +
-  geom_point()
+  geom_point()  #wants point for varialbes
 print(PMplot)
 
-# Separate plot with facets
+# Separate plot with facets face_wrap tool creates plot for eachs site name
 PMplot.faceted <-
   ggplot(EPAair, aes(x = Month, y = PM2.5, shape = as.factor(Year))) +
   geom_point() +
@@ -118,7 +119,7 @@ PMplot.faceted2 <-
   facet_grid(Site.Name ~ Year) 
 print(PMplot.faceted2)
 
-# Plot true time series with geom_line
+# Plot true time series with geom_line Provide your dataframe with a subset function. subset includes only site name listed. 
 PMplot.line <- 
   ggplot(subset(EPAair, Site.Name == "Leggett"), 
          aes(x = Date, y = PM2.5)) +
@@ -138,15 +139,15 @@ lightvsDO <-
   geom_point()
 print(lightvsDO)
 
-# Adjust axes
+# Adjust axes - to find relationship among variables remove outliers. Look at where observations are concentrated. 
 lightvsDOfixed <- 
   ggplot(PeterPaul.chem.nutrients, aes(x = irradianceWater, y = dissolvedOxygen)) +
   geom_point() +
-  xlim(0, 250) +
+  xlim(0, 250) + #start and end of graphs
   ylim(0, 20)
 print(lightvsDOfixed)
 
-# Depth in the fields of limnology and oceanography is on a reverse scale
+# Depth in the fields of limnology and oceanography is on a reverse scale - depth are the reverse scale so want 0 on top and depest observations to be lower 
 tempvsdepth <- 
   ggplot(PeterPaul.chem.nutrients, aes(x = temperature_C, y = depth)) +
   #ggplot(PeterPaul.chem.nutrients, aes(x = temperature_C, y = depth, color = daynum)) +
@@ -160,7 +161,8 @@ NvsP <-
   geom_smooth(method = lm) +
   geom_abline(aes(slope = 16, intercept = 0))
 print(NvsP)
-
+ #tred line geom_smooth -choose meothod -lm is a liner line, 
+#if you know slope and intercept use geom_abline
 ```
 
 ### Plotting continuous vs. categorical variables
@@ -169,13 +171,21 @@ A traditional way to display summary statistics of continuous variables is a bar
 What might be more effective ways to display the information? Navigate to the boxplots page in the Caveats section to explore further.
 
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
+# Bar plot showing mean of each varialbe - look at https://www.data-to-viz.com/caveats.html
 # Box and whiskers plot
+# inside boxplot seperate boxplot by nutrients, nutrient column has name so use to seperate. 
 Nutrientplot3 <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(x = lakename, y = concentration)) +
-  geom_boxplot(aes(color = nutrient)) # Why didn't we use "fill"?
+  geom_boxplot(aes(color = nutrient)) # Why didn't we use "fill"? color is regards to contour of the shape, fill uses boxplot color the box not the other line. 
 print(Nutrientplot3)
 
-# Dot plot
+# Dot plot #aes definfing contour and filling categorize by nutrients. 
+# dotplot has shapes- fill inside of dots iwth colors
+#bin xis staking ovservations over y
+#bin width set width of bin
+#stakdir staking points based on center position
+#postion dodge making same level of concentration not overlay
+#dotsize size dots on graphs
 Nutrientplot4 <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(x = lakename, y = concentration)) +
   geom_dotplot(aes(color = nutrient, fill = nutrient), binaxis = "y", binwidth = 1, 
