@@ -3,6 +3,8 @@ title: "Ariel OCallaghan Assignment 5: Data Visualization"
 author: "Ariel O'Callaghan"
 output: pdf_document
 geometry: margin=2.54cm
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -41,13 +43,14 @@ the processed data file for the Niwot Ridge litter dataset (use the
 ```{r}
 #1
 getwd()
-install.packages("tidyverse")
-install.packages("lubridate")
-install.packages("cowplot")
+#install.packages("tidyverse")
+#install.packages("lubridate")
+#install.packages("cowplot")
+
 #themes
-install.packages("viridis")
-install.packages("RColorBrewer")
-install.packages("colormap")
+#install.packages("viridis")
+#install.packages("RColorBrewer")
+#install.packages("colormap")
 
 library(tidyverse)
 library(lubridate)
@@ -62,8 +65,7 @@ NTL.LTER.chem.nutrients <-
 NEON.litter.mass <- 
   read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv", stringsAsFactors = TRUE)
 #2 
-#capital "Y" and lowercase "y" mean different things. In this case the year was fully written out "2018" so you needed to use capital "Y". The use of lowercase "y" tells your code the last two digits of the year are given so it would incorrectly interpret the year to be "20" thus 2020 instead of 2018.
-#A quick way to change the entire contents of a column is by doing dataframe$column <- "value" 
+
 NEON.litter.mass$collectDate <- as.Date(NEON.litter.mass$collectDate, format = "%Y-%m-%d")
 factor(NEON.litter.mass$collectDate)
 class(NEON.litter.mass$collectDate)
@@ -95,6 +97,24 @@ limits using `xlim()` and/or `ylim()`).
 
 ```{r}
 #4
+#Display colors
+#scales::show_col(colormap(colormap = colormaps$viridis, nshades = 16))
+#scales::show_col(colormap(colormap = colormaps$inferno, nshades = 16))
+#scales::show_col(colormap(colormap = colormaps$magma, nshades = 16))
+#display.brewer.all(n = 9) 
+
+#scatterplot
+phosphors.vs.phosphate<-
+  ggplot(NTL.LTER.chem.nutrients, aes(x = tp_ug, y = po4, color = lakename)) +
+  geom_point(alpha= 0.7, size = 2.5) + 
+  geom_smooth(method = lm, color = "black") +
+  xlim(0,125)+
+  ylim(0,50)+
+  scale_color_viridis_d()+
+  theme(legend.position = "right")+
+  labs(x="Phosphours tp_ug", y="Phosphate po4")
+print(phosphors.vs.phosphate)
+
 
 ```
 
@@ -110,12 +130,38 @@ see <https://r-lang.com/month-abb-in-r-with-example>
 ```{r}
 #5
 
+NTL.LTER.chem.nutrients$month <- as.factor(NTL.LTER.chem.nutrients$month) #fix month so 1-12 show up
+
+chem.nutrients.temp<-
+  ggplot(NTL.LTER.chem.nutrients, aes(x = month, y=temperature_C ))+
+  geom_boxplot(aes(color = lakename))+
+  xlab(expression("Month")) + ylab(expression("Tempearature (C)")) + labs(color = "Lake Name") +
+  theme(legend.position = "none")
+print(chem.nutrients.temp)
+  
+chem.nutrients.TP<-
+  ggplot(NTL.LTER.chem.nutrients, aes(x = month, y=tp_ug ))+
+  geom_boxplot(aes(color = lakename)) +
+  xlab(expression("Month")) + ylab(expression("Total Phosphorus")) + labs(color = "Lake Name")+
+   theme(legend.position = "none")
+print(chem.nutrients.TP)
+  
+chem.nutrients.TN<-
+  ggplot(NTL.LTER.chem.nutrients, aes(x = month, y=tn_ug ))+
+  geom_boxplot(aes(color = lakename))+
+  xlab(expression("Month")) + ylab(expression("Total Nitrogen")) + labs(color = "Lake Name")+
+  theme(legend.position = "right")
+print(chem.nutrients.TN)
+
+plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 1, align = 'h', rel_widths = c(4,4,10))
+
+
 ```
 
 Question: What do you observe about the variables of interest over seasons 
 and between lakes? 
 
-> Answer: 
+> Answer: The temperatue increases during the summer months and is colder in the December. Temperature in Peter and Paul lake follow similar trends with the greatest different in means for the month of November. Total Phosphorus is lesss in Paul lake then Peter lake with it slowly increasing throught the year. Total Nitrogen doesis higher in Peter lake then Paul lake. 
 
 6. [Niwot Ridge] Plot a subset of the litter dataset by displaying only the 
 "Needles" functional group. Plot the dry mass of needle litter by date and 
@@ -127,11 +173,25 @@ three facets rather than separated by color.
 
 ```{r}
 #6
+NEON.litter.mass.function.group <- filter(NEON.litter.mass, functionalGroup %in% c("Needles"))
+
+Neon.litter.needles<-
+  ggplot(NEON.litter.mass, aes(x = dryMass, y= collectDate ))+
+  geom_point(aes(color = nlcdClass))+
+  xlab(expression("Dry Mass")) + ylab(expression("Collection Date")) + labs(color = "Needles Function Group")
+print(Neon.litter.needles)
 
 #7
+
+Neon.litter.needles.facet<-
+  ggplot(NEON.litter.mass, aes(x = dryMass, y= collectDate ))+
+  geom_point()+
+  xlab(expression("Dry Mass")) + ylab(expression("Collection Date")) + labs(color = "Needles Function Group")+
+   facet_wrap(vars(nlcdClass), nrow = 3)
+print(Neon.litter.needles.facet)
 
 
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer:
+> Answer: Graph 7 splits out the data for each needles functional group and easier to see. The points on graph 6 overlap. Graph 7 parces out the dat more. 
