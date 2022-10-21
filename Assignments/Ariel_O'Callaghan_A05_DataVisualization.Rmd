@@ -150,10 +150,10 @@ chem.nutrients.TN<-
   ggplot(NTL.LTER.chem.nutrients, aes(x = month, y=tn_ug ))+
   geom_boxplot(aes(color = lakename))+
   xlab(expression("Month")) + ylab(expression("Total Nitrogen")) + labs(color = "Lake Name")+
-  theme(legend.position = "right")
+  theme(legend.position = "top")
 print(chem.nutrients.TN)
 
-plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 1, align = 'h', rel_widths = c(6,6,8))
+plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 1, align = 'h', rel_widths = c(3,3,3))
 
 
 ```
