@@ -4,7 +4,7 @@ author: "Ariel O'Callaghan"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -150,13 +150,25 @@ chem.nutrients.TN<-
   ggplot(NTL.LTER.chem.nutrients, aes(x = month, y=tn_ug ))+
   geom_boxplot(aes(color = lakename))+
   xlab(expression("Month")) + ylab(expression("Total Nitrogen")) + labs(color = "Lake Name")+
-  theme(legend.position = "top")
+  theme(legend.position = "bottom") 
 print(chem.nutrients.TN)
 
-plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 1, align = 'h', rel_widths = c(3,3,3))
+plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 3, align = 'h', rel_heights =  c(2.5,3,4)) 
 
-#I have messsed with this a lot but its not doing what the code says. changed legend position to top but does not print graph that way. 
+#+element_text(size = NULL)
 
+#plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 3, align = 'v', rel_heights =  c(2.5,3,4))+ theme(axis.title.y = "right") 
+
+#plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 3, align = 'v', rel_heights =  c(2.5,3,4))+ theme(axis.text.y = element_text(angle = 45))
+
+#plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, align = 'v', rel_heights =  c(8,8,10))
+
+#plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, align = 'h')
+
+#plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 1, axis = "I")
+
+#plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, aling = "v")
+#plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, axis = "tblr")
 ```
 
 Question: What do you observe about the variables of interest over seasons 
@@ -195,4 +207,4 @@ print(Neon.litter.needles.facet)
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer: Graph 7 splits out the data for each needles functional group and easier to see. The points on graph 6 overlap. Graph 7 parces out the dat more. 
+> Answer: Graph 7 splits out the data for each needles functional group and easier to see. The points on graph 6 overlap. Graph 7 parces out the data more and is easier to compare. 
