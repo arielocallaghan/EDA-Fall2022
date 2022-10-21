@@ -155,6 +155,7 @@ print(chem.nutrients.TN)
 
 plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 1, align = 'h', rel_widths = c(3,3,3))
 
+#I have messsed with this a lot but its not doing what the code says. changed legend position to top but does not print graph that way. 
 
 ```
 
