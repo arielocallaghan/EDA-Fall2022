@@ -67,7 +67,7 @@ NEON.litter.mass <-
 #2 
 
 NEON.litter.mass$collectDate <- as.Date(NEON.litter.mass$collectDate, format = "%Y-%m-%d")
-factor(NEON.litter.mass$collectDate)
+#factor(NEON.litter.mass$collectDate)
 class(NEON.litter.mass$collectDate)
 
 NTL.LTER.chem.nutrients$sampledate <- as.Date(NTL.LTER.chem.nutrients$sampledate, format = "%Y-%m-%d")
@@ -153,7 +153,7 @@ chem.nutrients.TN<-
   theme(legend.position = "right")
 print(chem.nutrients.TN)
 
-plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 1, align = 'h', rel_widths = c(4,4,10))
+plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 1, align = 'h', rel_widths = c(6,6,8))
 
 
 ```
