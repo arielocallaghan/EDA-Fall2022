@@ -12,7 +12,7 @@ editor_options:
 #For it to work, the "formatR" package needs to be installed
 
 install.packages('formatR') 
-knitr::opts_chunk$set(tidy.opts=list(width.cutoff=45), tidy=TRUE)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50), tidy=TRUE)
 ```
 
 ## OVERVIEW
@@ -155,6 +155,8 @@ chem.nutrients.TN<-
 print(chem.nutrients.TN)
 
 plot_grid(chem.nutrients.temp, chem.nutrients.TP, chem.nutrients.TN, nrow = 3, align = 'h', rel_heights =  c(2.5,3,4)) 
+
+#height adjusted for last one due to legend and middle one has more do to large y axis. other code below is me playing around. Also tried to get the y axis title at an angle but it didn't work. 
 
 #+element_text(size = NULL)
 
