@@ -99,7 +99,7 @@ What other variables can we add to improve model?
 
 
 
-#Exercise 5: Choose a model by AIC in a Stepwise Algorithm. Do the results from AIC match the variables you selected on Exercise 5?
+#Exercise 5: Choose a model by AIC in a Stepwise Algorithm. Do the results from AIC match the variables you selected on Exercise 5? dakldfd
 
 library(dplyr)
 EPAair.subset<-
