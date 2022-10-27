@@ -36,10 +36,14 @@ This exercise accompanies the lessons in Environmental Data Analytics on general
 #1
 getwd()
 
+install.packages('formatR')
+
 install.packages("tidyverse")
 install.packages("agricolae")
+install.packages("lubridate")
 library(tidyverse)
 library(agricolae)
+library(lubridate)
 
 NTL.chem.raw <- 
   read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv", stringsAsFactors = TRUE)
@@ -76,11 +80,25 @@ Ha:
 #4
 
 NTL.chem.wrangled <- 
-  NTL.chem.raw%>%
-  filter("lakename", "year4", "daynum", "depth", "temperature_C") %>%
-  mutate(month= month (sampledate)) %>%
-  drop_na()
+  NTL.chem.raw %>%
+  mutate(Month = month(sampledate)) %>%
+  filter(Month == 7) %>%
+  select(lakename , year4, daynum, depth, temperature_C) %>%
+  na.omit()
+  
 #5
+
+temp.depth.regression <- lm(NTL.chem.raw$temperature_C ~ NTL.chem.raw$depth)
+summary(temp.depth.regression)
+
+temp.vs.depth<-
+  ggplot(NTL.chem.raw, aes(x = temperature_C, y = depth)) +
+  geom_point(alpha= 0.7, size = 2.5) + 
+  geom_smooth(method = lm, color = "blue") +
+  xlim(0, 35)+
+  theme(legend.position = "right")+
+  labs(x="Temperature (C)", y="Depth (ft)")
+print(temp.vs.depth)
 
 
 ```
