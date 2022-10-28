@@ -120,8 +120,7 @@ cor.test(NTL.chem.raw$temperature_C, NTL.chem.raw$depth)
 
 7. Perform a linear regression to test the relationship and display the results
 
-```{r}
-#test
+```
 
 ```{r}
 #7
@@ -202,7 +201,8 @@ par(mfrow = c(1,1))
 ```{r anova.model}
 #12
 
-
+# not needed per directions shapiro.test(NTL.chem.wrangled
+bartlett.test(NTL.chem.raw$daynum ~ NTL.chem.wrangled$temperature_C)
 ```
 
 13. Is there a significant difference in mean temperature among the lakes? Report your findings. 
