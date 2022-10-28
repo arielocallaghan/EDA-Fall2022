@@ -1,0 +1,56 @@
+---
+title: "notes"
+author: "Ariel O'Callaghan"
+date: "2022-10-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+
+
+TPAIC<- lm(data = NTL.chem.raw, temperature_C ~ year4,  + temperature_C ~ daynum + temperature_C ~ depth)
+
+
+
+#Choose a model by AIC in a Stepwise Algorithm
+step(TPAIC)
+Tempmodel <- lm(data = NTL.chem., temptp_ug ~ dissolvedOxygen + temperature_C + tn_ug)
+summary(TPmodel)
+
+#10
+#from lesson 6
+TPregression <- lm(data = subset(PeterPaul.chem.nutrients, lakename == "Paul Lake"), 
+                   tp_ug ~ depth + dissolvedOxygen)
+summary(TPregression)
+
+TPplot <- ggplot(subset(PeterPaul.chem.nutrients, lakename == "Paul Lake"), 
+                 aes(x = dissolvedOxygen, y = tp_ug, color = depth)) +
+  geom_point() +
+  xlim(0, 20)
+print(TPplot)
+
+par(mfrow = c(2,2), mar=c(4,4,4,4))
+plot(TPregression)
+par(mfrow = c(1,1))
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
