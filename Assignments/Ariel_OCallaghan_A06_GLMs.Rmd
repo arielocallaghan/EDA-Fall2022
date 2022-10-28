@@ -203,6 +203,8 @@ par(mfrow = c(1,1))
 
 # not needed per directions shapiro.test(NTL.chem.wrangled
 bartlett.test(NTL.chem.raw$daynum ~ NTL.chem.wrangled$temperature_C)
+
+#ttt
 ```
 
 13. Is there a significant difference in mean temperature among the lakes? Report your findings. 
