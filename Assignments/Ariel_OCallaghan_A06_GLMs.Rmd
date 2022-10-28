@@ -41,9 +41,12 @@ install.packages('formatR')
 install.packages("tidyverse")
 install.packages("agricolae")
 install.packages("lubridate")
+install.packages("corrplot")
+
 library(tidyverse)
 library(agricolae)
 library(lubridate)
+library(corrplot)
 
 NTL.chem.raw <- 
   read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv", stringsAsFactors = TRUE)
@@ -87,20 +90,26 @@ NTL.chem.wrangled <-
   na.omit()
   
 #5
-
+#regression information 
 temp.depth.regression <- lm(NTL.chem.raw$temperature_C ~ NTL.chem.raw$depth)
 summary(temp.depth.regression)
 
+  
+    
+#scatterplot
 temp.vs.depth<-
-  ggplot(NTL.chem.raw, aes(x = temperature_C, y = depth)) +
-  geom_point(alpha= 0.7, size = 2.5) + 
+  ggplot(NTL.chem.raw, aes(x = depth, y = temperature_C)) +
+   geom_point(alpha= 0.7, size = 2.5) +
   geom_smooth(method = lm, color = "blue") +
-  xlim(0, 35)+
+  ylim(0, 35)+
   theme(legend.position = "right")+
   labs(x="Temperature (C)", y="Depth (ft)")
 print(temp.vs.depth)
 
+#correlation
+cor.test(NTL.chem.raw$temperature_C, NTL.chem.raw$depth)
 
+```
 ```
 
 
@@ -111,11 +120,27 @@ print(temp.vs.depth)
 
 7. Perform a linear regression to test the relationship and display the results
 
-```{r linear.regression}
+```{r}
+#test
+
+```{r}
 #7
+# Plot the regression
+temp.depth.2 <- 
+  ggplot(NTL.chem.raw, aes(x = depth, y = temperature_C)) +
+  ylim(0, 35) +
+  geom_point() 
+print(temp.depth.2) 
+
+
+#delete
+par(mfrow = c(2,2), mar=c(4,4,4,4))
+plot(temp.depth.2)
+par(mfrow = c(1,1))
 
 
 ```
+
 
 
 8. Interpret your model results in words. Include how much of the variability in temperature is explained by changes in depth, the degrees of freedom on which this finding is based, and the statistical significance of the result. Also mention how much temperature is predicted to change for every 1m change in depth. 
@@ -136,10 +161,30 @@ Let's tackle a similar question from a different approach. Here, we want to expl
 ```{r temperature.model}
 #9
 
+TPAIC<- lm(data = NTL.chem.raw, temperature_C ~ year4,  + temperature_C ~ daynum + temperature_C ~ depth)
 
+
+
+#Choose a model by AIC in a Stepwise Algorithm
+step(TPAIC)
+Tempmodel <- lm(data = NTL.chem., temptp_ug ~ dissolvedOxygen + temperature_C + tn_ug)
+summary(TPmodel)
 
 #10
+#from lesson 6
+TPregression <- lm(data = subset(PeterPaul.chem.nutrients, lakename == "Paul Lake"), 
+                   tp_ug ~ depth + dissolvedOxygen)
+summary(TPregression)
 
+TPplot <- ggplot(subset(PeterPaul.chem.nutrients, lakename == "Paul Lake"), 
+                 aes(x = dissolvedOxygen, y = tp_ug, color = depth)) +
+  geom_point() +
+  xlim(0, 20)
+print(TPplot)
+
+par(mfrow = c(2,2), mar=c(4,4,4,4))
+plot(TPregression)
+par(mfrow = c(1,1))
 
 ```
 
