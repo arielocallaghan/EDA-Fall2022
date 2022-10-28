@@ -97,7 +97,7 @@ temp.vs.depth<-
    geom_point(alpha= 0.7, size = 2.5) +
   geom_smooth(method = lm, color = "blue") +
   ylim(0, 35)+
-  theme(legend.position = "right")+
+  theme(legend.position = "top")+
   labs(x="Depth (Meters)", y= "Temperature (C)")
 print(temp.vs.depth)
 
@@ -134,8 +134,7 @@ cor.test(NTL.chem.raw$temperature_C, NTL.chem.raw$depth)
 8. Interpret your model results in words. Include how much of the variability in temperature is explained by changes in depth, the degrees of freedom on which this finding is based, and the statistical significance of the result. Also mention how much temperature is predicted to change for every 1m change in depth. 
 
 > Answer:
-The R-squared value is 0.67 percent which means that 67% of the data is repersented by 34754 degrees of freedom. 
-Also you have a negative correlcation of - 0.81 between temperature and depth. 
+The R-squared value is 0.67 percent which means that 67% of the data is repersented by 34754 degrees of freedom. Also you have a negative correlcation of - 0.81 between temperature and depth. 
 
 ---
 
@@ -155,18 +154,13 @@ step(TPAIC)
 
 summary(TPAIC)
 
-
-#fun error - delete
-corrplot(NTL.chem.wrangled, method = "ellipse")
-corrplot.mixed(NTL.chem.wrangled, upper = "ellipse")
+#NTL.corr <- cor(NTL.chem.wrangled)
+#corrplot(NTL.corr, method = "ellipse")
+#corrplot.mixed(NTL.corr, upper = "ellipse")
 
 #10
 tempregression <-lm(data = NTL.chem.wrangled, temperature_C ~ year4  + daynum + depth)
 summary(tempregression)
-
-#tempplot <-ggplot(NTL.chem.wrangled,aes(x= year4, y= temperature_C))+
-#  geom_point() 
-#print(tempplot)
 
 variable.regression <- lm(data = NTL.chem.wrangled, temperature_C ~ year4  + daynum)
 summary(variable.regression)
@@ -178,7 +172,7 @@ summary(variable.regression)
 11. What is the final set of explanatory variables that the AIC method suggests we use to predict temperature in our multiple regression? How much of the observed variance does this model explain? Is this an improvement over the model using only depth as the explanatory variable?
 
 > Answer: 
-The R-squared value increased from .67 when just using depth to 0.74 when adding in year4, daynum. A regression run with out depth returns an R squared value of 0.002363. The AIC values were all close together 26066 - 39189 and were kept in for further analysis. 
+The R-squared value increased from .67 when just using depth to 0.74 when adding in year4, daynum. A regression run with out depth returns an R squared value of 0.002363. None has the lowest AIC vairable of 26066 so all of the other varialbes will stay in the regression.  
 
 
 ---
@@ -189,25 +183,22 @@ The R-squared value increased from .67 when just using depth to 0.74 when adding
 ```{r anova.model}
 #12
 
-bartlett.test(NTL.chem.wrangled$lakename ~NTL.chem.wrangled$temperature_C)
+# Do not use # bartlett.test(NTL.chem.wrangled$lakename ~NTL.chem.wrangled$temperature_C)
 
 anova.lakes <- aov(data = NTL.chem.wrangled, temperature_C ~ lakename)
 summary(anova.lakes)
 
-anova.lakes.raw <- aov(data = NTL.chem.raw, temperature_C ~ lakename)
-summary(anova.lakes.raw)
 
 anova.lakes.lm <- lm(data = NTL.chem.wrangled, temperature_C ~ lakename)
 summary(anova.lakes.lm)
 
-anova.lakes.lm.raw <- lm(data = NTL.chem.raw, temperature_C ~ lakename)
-summary(anova.lakes.lm.raw)
+
 ```
 
 13. Is there a significant difference in mean temperature among the lakes? Report your findings. 
 
-> Answer: 
-
+> Answer: The Anova model shows that mean temperature among all the lakes to be statistically
+signicant. The linear model shows how statistically different every single lake is by providing a their specific p-values. The estimated standard delivation from the intercept is different from intecept temberapture.  The standard error value on th linear model is 7.355.
 
 
 14. Create a graph that depicts temperature by depth, with a separate color for each lake. Add a geom_smooth (method = "lm", se = FALSE) for each lake. Make your points 50 % transparent. Adjust your y axis limits to go from 0 to 35 degrees. Clean up your graph to make it pretty. 
@@ -220,7 +211,7 @@ temp.depth.3 <-
   geom_smooth(method = lm, se = FALSE) +
   ylim(0,35)+ 
   labs(x="Temperature (c)", y="Depth (ft)") +
-  theme(legend.position = "right", 
+  theme(legend.position = "top", 
         legend.text = element_text(size = 12), legend.title = element_text(size = 12))
 print(temp.depth.3)
 
@@ -242,7 +233,7 @@ summary.aov(anova.lakes)
 16.From the findings above, which lakes have the same mean temperature, statistically speaking, as Peter Lake? Does any lake have a mean temperature that is statistically distinct from all the other lakes?
 
 >Answer:
-
+The Anova test does not idenfiy particular differences between paris of means are significant. This Tukey Honest Significant Differerences method determines. Peter and Paul lake both have c grouping and similar means. Peter and paul lake are statistically sginfication with means temp of 13.31 and 13.81 respectively. Ward Lake-Crampton Lake have a difference in mean temperature of 0.8932661 
  
 
 17. If we were just looking at Peter Lake and Paul Lake. What's another test we might explore to see whether they have distinct mean temperatures? 
@@ -254,9 +245,21 @@ summary.aov(anova.lakes)
 18. Wrangle the July data to include only records for Crampton Lake and Ward Lake. Run the two-sample T-test on these data to determine whether their July temperature are same or different. What does the test say? Are the mean temperatures for the lakes equal? Does that match you answer for part 16?
 
 ```{r t.test}
-crampton.ward.lake<-
-  
+#Ho Mu>=50
+#Ha mu<50
 
+crampton.ward.lake<-
+  NTL.chem.wrangled %>%
+  filter(lakename == c("Crampton Lake", "Ward Lake"))
+
+summary(crampton.ward.lake)
+length(crampton.ward.lake)
+
+crampton.ward.ttest <- t.test(crampton.ward.lake$temperature_C, mu=50, alternative = "less")
+crampton.ward.ttest
+
+ttest2 <- t.test(crampton.ward.lake$temperature_C ~ crampton.ward.lake$lakename)
+ttest2
 ```
 
->Answer: 
+>Answer:  There are 214 degrees of freedom or obervations. The p value is 0.5 so we are rejecting the null hypothesis and accepting the alternative hypotheis. The means of Crampton lake is 15.37 and the mean of Ward Lake is 14.25. 
