@@ -1,6 +1,6 @@
 ---
 title: "Assignment 7: Time Series Analysis"
-author: "Student Name"
+author: "Ariel O'Callaghan"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -108,10 +108,14 @@ GaringerOzoneF<-left_join(Days,GaringerOzone_Wrangled, by = c("Date"))
 
 ```{r}
 #7
-
+ppm.aqi.plot<-ggplot(GaringerOzoneF, aes(y = Daily.Max.8.hour.Ozone.Concentration, x = Date ),  size = 0.25, color = "#c13d75ff") +
+  geom_line() +
+  geom_smooth(method = lm, se = FALSE) +
+  labs(x="Date", y="PPM")
+print(ppm.aqi.plot)
 ```
 
->Answer:
+>Answer:Ozone concentration is decreasing over time. There is also strong seasonal variability but the linear regression decreases. 
 
 ## Time Series Analysis
 
@@ -121,23 +125,29 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 
 ```{r}
 #8
-summary(GraingerOzone)
+#summary(GaringerOzoneF)
 
-GOinterpolate<-
-  GraninerOzone%>%
-  mutate(Ozone_Cnx = zoo::na.approx(Daily.Max.8.hour.Ozone.Concentration))
-
+ozone.fill<-
+  GaringerOzoneF%>%
+  mutate(Daily.ozone.interp.= zoo::na.approx(Daily.Max.8.hour.Ozone.Concentration))
+#print(ozone.fill)
 
 ```
 
-> Answer: 
+> Answer: The piecewise constant or nearest neighbor approach assmumes equal measurement to the nearest date. The spline is a linear interploation where the quaratic function is sued rather then interolating from a straight line. The linear interploation we used is a connect the dots apprach with interplates between the nearest datapoints which fills in the gaps in our time series data. 
 
 
 9. Create a new data frame called `GaringerOzone.monthly` that contains aggregated data: mean ozone concentrations for each month. In your pipe, you will need to first add columns for year and month to form the groupings. In a separate line of code, create a new Date column with each month-year combination being set as the first day of the month (this is for graphing purposes only)
 
 ```{r}
 #9 
-#create to new columns one named month-year showing fist day of each month. second column with mean of ozone each month. demisnions ill have fewwer rows then the previous columns. 
+GaringerOzone.monthly<- 
+  ozone.fill %>%
+  mutate(month = month(Date), year= year(Date))%>%
+  mutate(Month_year = my(paste(month, "-", year))) %>%
+  select(Month_year, Daily.ozone.interp.) %>%
+  group_by(Month_year)%>%
+  summarise(Mean_PPM = mean(Daily.ozone.interp.))
 
 ```
 
@@ -146,6 +156,8 @@ GOinterpolate<-
 
 ```{r}
 #10
+GaringerOzone.daily.ts<-ts(ozone.fill$Daily.ozone.interp., start = c(2010,1), frequency = 365)
+GaringerOzone.monthly.ts<-ts(GaringerOzone.monthly$Mean_PPM, start = c(2010,1), frequency = 12)
 
 ```
 
@@ -154,8 +166,11 @@ GOinterpolate<-
 
 ```{r}
 #11
+GaringerOzone.daily.ts.decomposed <- stl(GaringerOzone.daily.ts, s.window = "periodic")
+GaringerOzone.monthly.ts.decomposed <- stl(GaringerOzone.monthly.ts, s.window = "periodic")
 
-
+plot(GaringerOzone.daily.ts.decomposed)
+plot(GaringerOzone.monthly.ts.decomposed)
 ```
 
 
@@ -163,26 +178,31 @@ GOinterpolate<-
 
 ```{r}
 #12
+monthly.ozone.trend<- Kendall::SeasonalMannKendall(GaringerOzone.monthly.ts)
 
-
-
+#summary(monthly.ozone.trend)
 ```
 
-> Answer: 
+> Answer: You can see from the graphs above that there is seasonability in the ozone data. 
 
 13. Create a plot depicting mean monthly ozone concentrations over time, with both a geom_point and a geom_line layer. Edit your axis labels accordingly.
 
 ```{r}
 # 13
 
-
-
+ozone.month.plot<-
+  ggplot(GaringerOzone.monthly, aes(x=Mean_PPM, y=Month_year))+
+  geom_point() + 
+  geom_line()+
+  geom_smooth(method = lm, se = FALSE) +
+  labs(x="PPM", y="Date") 
+print(ozone.month.plot)  
 
 ```
 
 14. To accompany your graph, summarize your results in context of the research question. Include output from the statistical test in parentheses at the end of your sentence. Feel free to use multiple sentences in your interpretation.
 
-> Answer: 
+> Answer: There is a negative trend as ozone concentrations decreased.. The tau from the Mann-Kendall test shows -0.14. The p value is less then 0.5 so the correlation between ozone and time is significant. The score is -77 which also shows a negative trend. 
 
 15. Subtract the seasonal component from the `GaringerOzone.monthly.ts`. Hint: Look at how we extracted the series components for the EnoDischarge on the lesson Rmd file.
 
@@ -191,13 +211,13 @@ GOinterpolate<-
 ```{r}
 #15
 
-
+seasonal.removed<- (GaringerOzone.monthly.ts - GaringerOzone.monthly.ts.decomposed$time.series[,1])
 
 #16
 
-
-
+monthly.ozone.trend.noseasonal<- Kendall::MannKendall(seasonal.removed)
+summary(monthly.ozone.trend.noseasonal)
 
 ```
 
-> Answer: 
+> Answer: The score of the MannKenall with the seasonal removed shows a score of -1179 whie the score of the seasonal kendall has a score of -77. The two sided p value of the seasonal removed data is 0.007 much lower then  p value of the seasonal data of 0.046. The tau for seasonal removed is -0.165 and for seaosonal -0.143. Both tests show that ozone is statistically significant with time even though the statstics vary between the two tests. 
