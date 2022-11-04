@@ -91,7 +91,10 @@ GaringerOzone_Wrangled<- GaringerOzone %>%
   select("Date", "Daily.Max.8.hour.Ozone.Concentration", "DAILY_AQI_VALUE")
 
 # 5
-Days<- as.data.frame(seq.Date(from = as.Date("2010-01-01"), to = as.Date("2019-12-31"), by=1), colnames("Date"))
+#Days<- as.data.frame(seq.Date(from = as.Date("2010-01-01"), to = as.Date("2019-12-31"), by=1), colnames("Date"))
+
+Days<- as.data.frame(seq.Date(from = as.Date("2010-01-01"), to = as.Date("2019-12-31"), by=1))
+colnames(Days)<-"Date"
 
                       
 # 6
