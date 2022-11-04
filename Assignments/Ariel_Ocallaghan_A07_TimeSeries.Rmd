@@ -31,7 +31,43 @@ The completed exercise is due on Tuesday, March 16 at 11:59 pm.
 
 ```{r, message = FALSE}
 #1
+#install.packages('formatR')
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50), tidy=TRUE)
 
+library(tidyverse)
+library(lubridate)
+#install.packages("trend")
+library(trend)
+#install.packages("zoo")
+library(zoo)
+#install.packages("Kendall")
+library(Kendall)
+#install.packages("tseries")
+library(tseries)
+
+getwd()
+
+EPA2010<- read.csv("Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2010_raw.csv", stringsAsFactors = TRUE)
+EPA2011<- read.csv("Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2011_raw.csv", stringsAsFactors = TRUE)
+EPA2012<- read.csv("Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2012_raw.csv", stringsAsFactors = TRUE)
+EPA2013<- read.csv("Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2013_raw.csv", stringsAsFactors = TRUE)
+EPA2014<- read.csv("Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2014_raw.csv", stringsAsFactors = TRUE)
+EPA2015<- read.csv("Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2015_raw.csv", stringsAsFactors = TRUE)
+EPA2016<- read.csv("Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2016_raw.csv", stringsAsFactors = TRUE)
+EPA2017<- read.csv("Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2017_raw.csv", stringsAsFactors = TRUE)
+EPA2018<- read.csv("Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2018_raw.csv", stringsAsFactors = TRUE)
+EPA2019<- read.csv("Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2019_raw.csv", stringsAsFactors = TRUE)
+
+
+mytheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+theme_set(mytheme)
+
+GaringerOzone<- rbind(EPA2010,EPA2011, EPA2012, EPA2013, EPA2014, EPA2015, EPA2016, EPA2017, EPA2018, EPA2019)
+
+
+GaringerOzone$Date <- as.Date(GaringerOzone$Date, format ="%m/%d/%Y")
 ```
 
 ## Wrangle
@@ -46,13 +82,20 @@ The completed exercise is due on Tuesday, March 16 at 11:59 pm.
 
 ```{r}
 # 3
+GaringerOzone$Date <- as.Date(GaringerOzone$Date, format ="%m/%d/%Y")
+class(GaringerOzone$Date)
 
 # 4
 
+GaringerOzone_Wrangled<- GaringerOzone %>%
+  select("Date", "Daily.Max.8.hour.Ozone.Concentration", "DAILY_AQI_VALUE")
+
 # 5
+Days<- as.data.frame(seq.Date(from = as.Date("2010-01-01"), to = as.Date("2019-12-31"), by=1), colnames("Date"))
 
+                      
 # 6
-
+GaringerOzoneF<-left_join(Days,GaringerOzone_Wrangled, by = c("Date"))
 
 ```
 
@@ -75,6 +118,12 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 
 ```{r}
 #8
+summary(GraingerOzone)
+
+GOinterpolate<-
+  GraninerOzone%>%
+  mutate(Ozone_Cnx = zoo::na.approx(Daily.Max.8.hour.Ozone.Concentration))
+
 
 ```
 
@@ -84,7 +133,8 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 9. Create a new data frame called `GaringerOzone.monthly` that contains aggregated data: mean ozone concentrations for each month. In your pipe, you will need to first add columns for year and month to form the groupings. In a separate line of code, create a new Date column with each month-year combination being set as the first day of the month (this is for graphing purposes only)
 
 ```{r}
-#9
+#9 
+#create to new columns one named month-year showing fist day of each month. second column with mean of ozone each month. demisnions ill have fewwer rows then the previous columns. 
 
 ```
 
