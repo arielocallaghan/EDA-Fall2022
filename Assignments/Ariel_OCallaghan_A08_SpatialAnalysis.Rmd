@@ -1,6 +1,6 @@
 ---
 title: "Assignment 8: Spatial Analysis in R"
-author: "Student Name"
+author: "Ariel O'Callaghan"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
