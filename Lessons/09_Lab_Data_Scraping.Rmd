@@ -234,8 +234,9 @@ The RVest scraping workflow is as follows:
 
 ```{r scrape.data.manually eval=FALSE}
 #1 Link to the web site using read_html
-the_website
-
+the_website <- read_html('https://www.eia.gov/electricity/state/')
+  
+#tags - basic-table-a or td:nth-child(1), td:nth-child(2), 
 #2&3 Locate elements and read their text attributes into variables
 the_states <- 
 the_price <- 
@@ -273,7 +274,7 @@ scrape.it <- function(the_year){
 
 # Map the function to scrape data from 2017 to 2019
 
-
+big_df <- map(seq(2015,2018), scrape.it)
 ```
 
 
