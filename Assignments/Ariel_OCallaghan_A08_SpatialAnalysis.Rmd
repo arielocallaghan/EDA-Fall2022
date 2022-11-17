@@ -1,11 +1,13 @@
 ---
-title: "Assignment 8: Spatial Analysis in R"
+title: 'Assignment 8: Spatial Analysis in R'
 author: "Ariel O'Callaghan"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 geometry: margin=2.54cm
-editor_options: 
+editor_options:
   chunk_output_type: console
-  markdown: 
+  markdown:
     wrap: 72
 ---
 
@@ -88,7 +90,7 @@ mapview(NE_Counties_Sf)
 6. What is the EPSG code of the Counties dataset? Is this a geographic or a projected coordinate reference system? (Or, does this CRS use angular or planar coordinate units?) To what datum is this CRS associated? (Tip: look the EPSG code on <https://spatialreference.org>) 
 
 > ANSWER: 
-> 
+> EPSG:32104: NAD83 / Nebraska
 
 
 ### Read in gage locations csv as a dataframe, then display the column names it contains
