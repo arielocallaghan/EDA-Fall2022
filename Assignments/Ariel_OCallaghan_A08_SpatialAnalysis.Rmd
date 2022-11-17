@@ -70,10 +70,10 @@ NE_Counties_Sf <- st_read('./Data/Spatial/cb_2018_us_county_20m.shp') %>%
   filter(STATEFP == 31)
   
 #4. Reveal the CRS of the counties features
-
+st_crs(NE_Counties_Sf)$epsg
 
 #5. Plot the data
-
+mapview(NE_Counties_Sf)
 ```
 
 6. What is the EPSG code of the Counties dataset? Is this a geographic or a projected coordinate reference system? (Or, does this CRS use angular or planar coordinate units?) To what datum is this CRS associated? (Tip: look the EPSG code on <https://spatialreference.org>) 
@@ -93,9 +93,11 @@ Next we'll read in some USGS/NWIS gage location data added to the `Data/Raw` fol
 ```{r Read in USGS Gage Locations}
 #7. Read in gage locations csv as a dataframe
 
+Gage_Loc <- read.csv('./Data/Raw/NWIS_SiteInfo_NE_RAW.csv')
+
 
 #8. Reveal the names of the columns
-
+colnames(Gage_Loc)
 
 ```
 
@@ -114,9 +116,11 @@ Next we'll read in some USGS/NWIS gage location data added to the `Data/Raw` fol
 ```{r Convert dataframe to sf dataframe}
 #10. Convert to an sf object
 
+Gage_Loc_df <- Gage_Loc %>% 
+st_as_sf(coords = c('dec_long_va', 'dec_lat_va'), crs = 4269)
 
 #11. Re-examine the column names
-
+colnames(Gage_Loc_df)
 
 ```
 
@@ -135,7 +139,11 @@ Next we'll read in some USGS/NWIS gage location data added to the `Data/Raw` fol
 
 ```{r Plot the spatial features}
 #13. Plot the gage locations atop the county features
-
+ggplot() +
+  geom_sf(data = NE_Counties_Sf, fill = 'Red') +
+  geom_sf(data = Gage_Loc_df, color = 'Blue') +
+  labs(title = "NWIS Gage Locations in Nebraska", 
+       subtitle = "Ariel O'Callaghan")
 
 ```
 
@@ -154,19 +162,22 @@ Lastly, we want to attach some gage height data to our site locations. I've cons
 
 ```{r}
 #14. Read the site flow data into a data frame
+Site_Flow_GH <- read.csv('./Data/Raw/NWIS_SiteFlowData_NE_RAW.csv', stringsAsFactors = FALSE)
 
 
 #15. Show the column names
-
+colnames(Site_Flow_GH)
 
 #16. Join the flow data to our NWIS gage location spatial dataframe
-
+Loc_Flow_Together <- Gage_Loc_df %>% 
+  left_join(Site_Flow_GH, by = c("site_no", "station_nm")) %>% 
+  drop_na(gage_ht)
 
 #17. Show the column names of the joined dataset
-
+colnames(Loc_Flow_Together)
 
 #18. Show the dimensions of this joined dataset
-
+dim(Loc_Flow_Together)
 
 ```
 
