@@ -31,11 +31,28 @@ This exercise accompanies the lessons in Environmental Data Analytics (ENV872L) 
 
 ```{r Prepare workspace}
 #1.
-
+getwd()
 
 #2. 
+install.packages("tidyverse")
+library(tidyverse)
 
+install.packages("sf")
+library(sf)
 
+install.packages("leaflet")
+library(leaflet)
+
+install.packages("mapview")
+library(mapview)
+
+install.packages("leaflet")
+library(leaflet)
+
+install.packages("lubridate")
+library(lubridate)
+#Disable on-the-fly projections
+sf::sf_use_s2(FALSE)
 ```
 
 ### Read (and filter) county features into an sf dataframe and plot
@@ -49,7 +66,9 @@ In this exercise, we will be exploring stream gage height data in Nebraska corre
 ```{r Read the county data into an sf dataframe}
 #3. Read in Counties shapefile into an sf dataframe, filtering for just NE counties
 
-
+NE_Counties_Sf <- st_read('./Data/Spatial/cb_2018_us_county_20m.shp') %>% 
+  filter(STATEFP == 31)
+  
 #4. Reveal the CRS of the counties features
 
 
