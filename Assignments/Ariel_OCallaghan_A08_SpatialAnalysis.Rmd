@@ -189,7 +189,8 @@ Now we can examine where the flooding appears most acute by visualizing gage hei
 
 ```{r}
 #Map the points, sized by gage height
-
+mapview(NE_Counties_Sf, col.regions = "Green") +
+  mapview(Loc_Flow_Together, zcol = "gage_ht") 
 
 ```
 
@@ -207,11 +208,16 @@ Up next we will do some spatial analysis with our data. To prepare for this, we 
 
 ```{r}
 #20 Transform the counties and gage location datasets to UTM Zone 14
+NE_Counties_UTM <- st_transform(NE_Counties_Sf, crs = 32614)
+
+
+Gage_Loc_UTM <- st_transform(Gage_Loc_df, crs =  32614)
 
 
 #21 Plot the data
 
-
+mapview(Gage_Loc_UTM, col.regions = "Blue") +
+  mapview(NE_Counties_UTM) 
 ```
 
 
