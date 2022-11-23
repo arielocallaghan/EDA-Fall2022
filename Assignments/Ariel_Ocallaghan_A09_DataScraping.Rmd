@@ -136,33 +136,33 @@ print(Durham.max.withdrawl.plot)
 #6.
 
 scrape.it <- function(pswid, year) {
-the_website <- read_html(paste0('https://www.ncwater.org/WUDC/app/LWSP/search.php?',pwsid, '/', year))
-
-water.system.name <- webpage %>% 
+  
+the_website <- read_html(paste0("https://www.ncwater.org/WUDC/app/LWSP/search.php?pwsid=", pwsid,"&year=", year, ))
+           
+water.system.name <- the_website %>% 
   html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>% 
   html_text()
 water.system.name
 
-pwsid <- webpage %>% 
+pwsid <- the_website %>% 
   html_nodes("td tr:nth-child(1) td:nth-child(5)") %>% 
   html_text()
 pwsid
-  
-ownership <- webpage %>% 
+
+ownership <- the_website %>% 
   html_nodes("div+ table tr:nth-child(2) td:nth-child(4)") %>% 
   html_text()
 ownership
 
-max.withdrawals.mgd <- webpage %>% 
+max.withdrawals.mgd <- the_website %>% 
   html_nodes("th~ td+ td , th~ td+ td") %>% 
   html_text()
 max.withdrawals.mgd
 
-df_scrape<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
-                          "Year"= rep(year,12),
-                          "Max_Withdrawals_mgd"= as.numeric(max.withdrawals.mgd))
 
-df_scrape <- df_scrape %>% 
+df_scrape<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
+                          "Year"= rep(the_year,12),
+                          "Max_Withdrawls_mgd"= as.numeric(max.withdrawals.mgd)) %>% 
   mutate(Water_system_name = !!water.system.name,
          PWSID = !!pwsid,
          Ownership = !!ownership,
@@ -178,10 +178,12 @@ return(df_scrape)
 ```{r fetch.and.plot.Durham.2015.data}
 #7
 
-df_scrape.3 <- scrape.it('03-32-010', 2015)
-view(df_scrape.3)
+df_durham_2015 <- scrape.it('03-32-010', 2015)
+view(df_durham_2015)
 
-
+ggplot(df_durham_2015 ,aes(x=Date,y=max.withdrawals.mgd)) +
+  geom_line()+
+  labs(title = paste("2015 Max Daily Water Withdrawal"), X = "Date", y = " Max Daily Withdrawals (mgd)")
 ```
 
 8. Use the function above to extract data for Asheville (PWSID = 01-11-010) in 2015. Combine this data with the Durham data collected above and create a plot that compares Asheville's to Durham's water withdrawals.
@@ -189,7 +191,14 @@ view(df_scrape.3)
 ```{r fetch.and.plot.Asheville.2015.data}
 #8
 
+df_Asheville_2015 <- scrape.it('01-11-010', 2015)
+view(df_Asheville_2015)
 
+durham_asheville<- rbind.data.frame(df_Asheville_2015, df_durham_2015)
+
+ggplot(durham_asheville,aes(x=Date,y=max.withdrawals.mgd, color=water.system.name))) +
+  geom_line() +
+  labs(title = paste("Durham and Asheville Water Wtihdrawl"), X = "Date", y = " Max Daily Withdrawals (mgd)")
 ```
 
 
