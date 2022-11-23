@@ -51,7 +51,8 @@ Indicate this website as the as the URL to be scraped. (In other words, read the
 
 ```{r set.the.scraping.website}
 #2
-
+webpage <- read_html('https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=03-32-010&year=2021')
+webpage
 
 ```
 
@@ -71,13 +72,25 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r scrape.the.data}
 #3
-water.system.name <- 
+water.system.name <- webpage %>% 
+  html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>% 
+  html_text()
+water.system.name
+
+pswid <- webpage %>% 
+  html_nodes("td tr:nth-child(1) td:nth-child(5)") %>% 
+  html_text()
+pswid
   
-pswid <- 
-  
-ownership <- 
-  
-max.withdrawals.mgd <- 
+ownership <- webpage %>% 
+  html_nodes("div+ table tr:nth-child(2) td:nth-child(4)") %>% 
+  html_text()
+ownership
+
+max.withdrawals.mgd <- webpage %>% 
+  html_nodes("th~ td+ td , th~ td+ td") %>% 
+  html_text()
+max.withdrawals.mgd
 
 ```
 
@@ -92,22 +105,81 @@ max.withdrawals.mgd <-
 
 ```{r create.a.dataframe.from.scraped.data}
 #4
+# Order of months fro scraped data. Month <- c(1,5,9,2,6,10,3,7,11,4,8,12)
 
+df_withdrawals<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
+                          "Year"= rep(2021,12),
+                          "Max_Withdrawls_mgd"= as.numeric(max.withdrawals.mgd))
 
+df_withdrawals <- df_withdrawals %>% 
+  mutate(Water_system_name = !!water.system.name,
+         PSWID = !!pswid,
+         Ownership = !!ownership,
+         Date = my(paste(Month,"-",Year)))
 
-#5
+#plot geom_line(aes(group=1))
+Durham.max.withdrawl.plot<-ggplot(df_withdrawals) +
+  geom_line(aes(x= Date,y= as.numeric(max.withdrawals.mgd))) + 
+  labs(title = "2021 Water usage data for",
+       subtitle = water.system.name,
+       y="Withdrawal (mgd)",
+       x="Date")
+print(Durham.max.withdrawl.plot)
 
-
-
+  
+ 
 ```
 
 6. Note that the PWSID and the year appear in the web address for the page we scraped. Construct a function using your code above that can scrape data for any PWSID and year for which the NC DEQ has data. **Be sure to modify the code to reflect the year and site (pwsid) scraped**.
 
 ```{r construct.a.scraping.function}
 #6.
+scrape.it <- function(the_year, pwsid.scrape){
+
+the_base_url <- 'https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid='
+pwsid.scrape <- '03-32-010'
+the_year <- 2018
+the_scrape_url <- paste0(the_base_url, pwsid.scrape,'&year=', the_year)
+print(the_scrape_url)
+
+the_website.scrape <- read_html(the_scrape_url)
 
 
+  
+water.system.name.2 <- the_website.scrape %>% 
+  html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>% 
+  html_text()
+water.system.name.2
 
+pswid.2 <- the_website.scrape %>% 
+  html_nodes("td tr:nth-child(1) td:nth-child(5)") %>% 
+  html_text()
+pswid.2
+  
+ownership.2 <- the_website.scrape %>% 
+  html_nodes("div+ table tr:nth-child(2) td:nth-child(4)") %>% 
+  html_text()
+ownership.2
+
+max.withdrawals.mgd.2 <- the_website.scrape %>% 
+  html_nodes("th~ td+ td , th~ td+ td") %>% 
+  html_text()
+max.withdrawals.mgd.2
+
+df_withdrawals.2<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
+                          "Year"= rep(the_year,12),
+                          "Max_Withdrawls_mgd"= as.numeric(max.withdrawals.mgd))
+
+df_withdrawals.2 <- df_withdrawals.2 %>% 
+  mutate(Water_system_name = !!water.system.name,
+         PSWID = !!pswid,
+         Ownership = !!ownership,
+         Date = my(paste(Month,"-",Year)))
+
+print.data.frame(df_withdrawals.2)
+
+return(df_withdrawals.2)
+}
 ```
 
 7. Use the function above to extract and plot max daily withdrawals for Durham (PWSID='03-32-010') for each month in 2015
@@ -115,6 +187,8 @@ max.withdrawals.mgd <-
 ```{r fetch.and.plot.Durham.2015.data}
 #7
 
+df_scrape <- scrape.it(2015,'03-32-010')
+view(df_scrape)
 
 ```
 

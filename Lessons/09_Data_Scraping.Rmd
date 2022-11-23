@@ -279,17 +279,19 @@ the_dfs <- lapply(X = the_years,
 #OR, use purrr's map function
 the_dfs <- map(the_years,scrape.it,the_facility=my_facility)
 
-#Conflate the returned dataframes into a single dataframe
+#Conflate the returned dataframes into a single dataframe - similar to r bind
 the_df <- bind_rows(the_dfs)
 
 #Plot, because it's fun and rewarding
 ggplot(the_df,aes(x=Date,y=Avg_Withdrawals_mgd)) + 
   geom_line() + 
-  geom_smooth(method="loess",se=FALSE) +
-  labs(title = paste("2020 Water usage data for",the_registrant),
-       subtitle = the_facility_name,
-       y="Withdrawal (mgd)",
-       x="Date")
+  geom_smooth(method="loess",se=FALSE) 
+
+## removed in lesson was part of plot above but didn't update correctly 
+  #labs(title = paste("2020 Water usage data for",the_registrant),
+      # subtitle = the_facility_name,
+     #  y="Withdrawal (mgd)",
+      # x="Date")
 ```
 
 # Part 3. Web Crawling
@@ -335,7 +337,7 @@ the_facility_ids_subset <-  sample(the_facility_ids,20)
 #Create a list of the year we want, the same length as the vector above
 the_years <- rep.int(2020,length(the_facility_ids_subset))
 
-#"Map" the "scrape.it" function to retrieve data for all these
+#"Map" the "scrape.it" function to retrieve data for all these - map 2 for more then one item. Itterates through the lists in parallel 
 dfs_2020 <- map2(the_years, the_facility_ids_subset, scrape.it) 
 
 #Conflate the returned list of dataframes into a single one
