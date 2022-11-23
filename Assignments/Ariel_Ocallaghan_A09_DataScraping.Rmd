@@ -161,12 +161,12 @@ max.withdrawals.mgd
 
 
 df_scrape<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
-                          "Year"= rep(the_year,12),
+                          "Year"= rep(year,12),
                           "Max_Withdrawls_mgd"= as.numeric(max.withdrawals.mgd)) %>% 
   mutate(Water_system_name = !!water.system.name,
          PWSID = !!pwsid,
          Ownership = !!ownership,
-         Date = my(paste(Month,"-",Year)))
+         Date = my(paste(Month,"-",year)))
 
 return(df_scrape)
 
@@ -209,8 +209,18 @@ ggplot(durham_asheville,aes(x=Date,y=max.withdrawals.mgd, color=water.system.nam
 ```{r fetch.and.plot.Asheville.multiyear.data}
 #9
 
+Ash_PWSID <- "01-11-010"
+Ash_Years <- rep(2010:2019)
 
+Asheville_with_9y <- map2(Ash_PWSID, Ash_Years, scrape.it)
+
+Ash_Together <- bind_rows(Asheville_with_9y)
+
+ggplot(Ash_Together,aes(x=Date,y=max.withdrawals.mgd, color = Water_System)) +
+geom_line() +
+geom_smooth(method="lm",se=FALSE) +
+labs( X = "Date", y = " Max Withdrawls (MGM)")
 ```
 
 >Question: Just by looking at the plot (i.e. not running statistics), does Asheville have a trend in water usage over time?
-
+Asheville uses more water over time. 
