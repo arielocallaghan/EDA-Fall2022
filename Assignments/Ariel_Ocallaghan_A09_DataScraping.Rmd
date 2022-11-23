@@ -138,3 +138,4 @@ max.withdrawals.mgd <-
 ```
 
 >Question: Just by looking at the plot (i.e. not running statistics), does Asheville have a trend in water usage over time?
+

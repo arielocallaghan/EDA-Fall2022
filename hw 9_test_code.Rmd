@@ -1,0 +1,141 @@
+---
+title: "Hw 9 test code"
+author: "Ariel O'Callaghan"
+date: "2022-11-22"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+
+  mutate(Date=my(paste0(Month,"-",Year)),
+         PWSID= !!pwsid,
+         ownership= !!ownership)
+
+#Modify the dataframe to include the facility name and type as well as the date (as date object)
+df_withdrawals <- df_withdrawals %>% 
+  mutate(Registrant = !!the_registrant,
+         Facility_name = !!the_facility_name,
+         Facility_type = !!the_facility_type,
+         Date = my(paste(Month,"-",Year)))
+
+#r4
+#remove before submitting testing other methods 
+#df_withdrawls<-data.frame(
+#  "Water System" = water.system.name,
+#  "PSWID" = pswid,
+#  "Ownership" = ownership,
+#  "Max Daily Use"= as.numeric(max.withdrawals.mgd)) %>%
+  mutate(Month=Month,
+         Year= rep(2021,12),
+         Date=my(paste0(Month,"-",Year)),
+         PWSID= !!pwsid,
+         ownership= !!ownership)
+
+
+#5
+df<-data.frame(
+  "Water System" = water.system.name,
+  "PWSID" = pwsid,
+  "Ownership" = ownership,
+  "Max Daily Use"= as.numeric(max.withdrawals.mgd)) %>%
+  mutate(Month=Month,
+         Year=Year,
+         Date=my(paste0(Month,"-",Year)),
+         PWSID= !!pwsid,
+         ownership= !!ownership)
+
+ labs(title = paste("2021 Water usage data"),
+       subtitle = "water.system.name",
+       y="Withdrawal (mgd)",
+       x="Date")
+  ####################
+Durham.max.withdrawl.plot.2<-ggplot(df_withdrawals) +
+  geom_line(aes(x= Date,y= as.numeric(max.withdrawals.mgd))) + 
+  geom_smooth(method = lm, se = FALSE) 
+  labs(y="Withdrawal (mgd)", x="Date")
+
+  geom_smooth(method = lm, se = FALSE) 
+
+
+#test
+  ggplot(the_df,aes(x=Date,y=Avg_Withdrawals_mgd)) + 
+  geom_line() + 
+  geom_smooth(method="loess",se=FALSE) 
+  
+#Plot test
+ggplot(df_withdrawals,aes(x=Date,y=Avg_Withdrawals_mgd)) + 
+  geom_line() + 
+  geom_smooth(method="loess",se=FALSE) +
+  labs(title = paste("2020 Water usage data for",the_registrant),
+       subtitle = the_facility_name,
+       y="Withdrawal (mgd)",
+       x="Date")
+
+##from lesson 
+ggplot(df_withdrawals,aes(x=Month,y=max.withdrawals.mgd)) + 
+  geom_line() + 
+  geom_smooth(method="loess",se=FALSE) +
+  labs(title = ("2021 Water usage data for Durham"),
+       subtitle = water.system.name,
+       y="Withdrawal (mgd)",
+       x="Date")
+
+
+
+
+#######------------------------------------------------------------------
+#6
+scrape.it <- function(the_year, the_facility)
+  
+scrape.it <- function(year, "03-32-010")
+durham_2021<- scape.function(2021, "03-32-010")
+
+durham.scrape<- scrape.it(2021, "03-32-010")
+view(durham.scrape)
+
+the_df <- scrape.it(2021, "03-32-010")
+view(the_df)
+
+
+
+scrape.it <- function(the_base_url, pwsid.scape, the_year)
+print(scrape.it())  
+  
+durham.scrape<- scrape.it(2020, "03-32-010")
+view(durham.scrape)  
+
+the_scrape_url <- paste0('www.ncwater.org/WUDC/app/LWSP/report.php', ?pwsid=03-32-010&year=2021)
+
+pwsid=03-32-010&year=2015
+
+
+the_scrape_url <- paste0('www.ncwater.org/WUDC/app/LWSP/search.php','/',03-32-010, '/', 2015)
+
+scrape.it <- function(the_year, the_facility)
+  
+
+durham.scrape<- scrape.it(2015, "03-32-010")
+view(durham.scrape) 
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
