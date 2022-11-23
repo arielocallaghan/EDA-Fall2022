@@ -135,9 +135,9 @@ print(Durham.max.withdrawl.plot)
 ```{r construct.a.scraping.function}
 #6.
 
-scrape.it <- function(pwsid, year) {
-  
-the_website <- read_html(paste0("https://www.ncwater.org/WUDC/app/LWSP/search.php?pwsid=", pwsid,'&year=', year ))
+scrape.it <- function(the_year, the_pwsid ) {
+
+the_website <- read_html(paste0("https://www.ncwater.org/WUDC/app/LWSP/search.php?pwsid=", the_pwsid,'&year=', the_year ))
            
 water.system.name <- the_website %>% 
   html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>% 
@@ -159,14 +159,14 @@ max.withdrawals.mgd <- the_website %>%
   html_text()
 max.withdrawals.mgd
 
-
+#c(1,5,9,2,6,10,3,7,11,4,8,12)
 df_scrape<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
-                          "Year"= rep(year,12),
-                          "Max_Withdrawls_mgd"= as.numeric(max.withdrawals.mgd)) %>% 
+                          "Year"= rep(the_year,12),
+                          "Max_Withdrawls_mgd"= as.numeric(max.withdrawals.mgd))%>% 
   mutate(Water_system_name = !!water.system.name,
          PWSID = !!pwsid,
          Ownership = !!ownership,
-         Date = my(paste(Month,"-",year)))
+         Date = my(paste(Month,"-",Year)))
 
 return(df_scrape)
 
@@ -178,7 +178,7 @@ return(df_scrape)
 ```{r fetch.and.plot.Durham.2015.data}
 #7
 
-df_durham_2015 <- scrape.it('03-32-010', 2015)
+df_durham_2015 <- scrape.it(2015, '03-32-010')
 view(df_durham_2015)
 
 ggplot(df_durham_2015 ,aes(x=Date,y=max.withdrawals.mgd)) +
@@ -191,7 +191,7 @@ ggplot(df_durham_2015 ,aes(x=Date,y=max.withdrawals.mgd)) +
 ```{r fetch.and.plot.Asheville.2015.data}
 #8
 
-df_Asheville_2015 <- scrape.it('01-11-010', 2015)
+df_Asheville_2015 <- scrape.it(2015, '01-11-010',)
 view(df_Asheville_2015)
 
 durham_asheville<- rbind.data.frame(df_Asheville_2015, df_durham_2015)
