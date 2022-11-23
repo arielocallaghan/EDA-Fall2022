@@ -105,7 +105,7 @@ max.withdrawals.mgd
 
 ```{r create.a.dataframe.from.scraped.data}
 #4
-# Order of months fro scraped data. Month <- c(1,5,9,2,6,10,3,7,11,4,8,12)
+# Order of months from scraped data. Month <- c(1,5,9,2,6,10,3,7,11,4,8,12)
 
 df_withdrawals<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
                           "Year"= rep(2021,12),
@@ -134,9 +134,10 @@ print(Durham.max.withdrawl.plot)
 
 ```{r construct.a.scraping.function}
 #6.
-scrape.it.2 <- function(pswid, year){
 
-  
+
+scrape.it.2 <- function(pswid, year) {
+
 the.website.2 <-read_html(paste0('https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=', pswid, '/', year))
 
 water.system.name <- webpage %>% 
@@ -161,7 +162,7 @@ max.withdrawals.mgd
 
 df_withdrawals.3<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
                           "Year"= rep(year,12),
-                          "Max_Withdrawls_mgd"= as.numeric(max.withdrawals.mgd))
+                          "Max_Withdrawals_mgd"= as.numeric(max.withdrawals.mgd))
 
 df_withdrawals.3 <- df_withdrawals.3 %>% 
   mutate(Water_system_name = !!water.system.name,
@@ -171,8 +172,8 @@ df_withdrawals.3 <- df_withdrawals.3 %>%
 
 return(df_withdrawals.3)
 
-df_scrape.3 <- scrape.it('03-32-010', 2015)
-view(df_scrape.3)
+print.data.frame(df_withdrawals.3)
+
 
 ##############
 #####################---------------
@@ -217,6 +218,8 @@ df_withdrawals.2 <- df_withdrawals.2 %>%
          Date = my(paste(Month,"-",Year)))
 
 return(df_withdrawals.2)
+print.data.frame(df_withdrawals.2)
+
 }
 ```
 
@@ -225,6 +228,8 @@ return(df_withdrawals.2)
 ```{r fetch.and.plot.Durham.2015.data}
 #7
 
+df_scrape.3 <- scrape.it('03-32-010', 2015)
+view(df_scrape.3)
 
 
 ```
