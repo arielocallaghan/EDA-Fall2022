@@ -135,9 +135,9 @@ print(Durham.max.withdrawl.plot)
 ```{r construct.a.scraping.function}
 #6.
 
-scrape.it <- function(pswid, year) {
+scrape.it <- function(pwsid, year) {
   
-the_website <- read_html(paste0("https://www.ncwater.org/WUDC/app/LWSP/search.php?pwsid=", pwsid,"&year=", year, ))
+the_website <- read_html(paste0("https://www.ncwater.org/WUDC/app/LWSP/search.php?pwsid=", pwsid,'&year=', year ))
            
 water.system.name <- the_website %>% 
   html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>% 
@@ -196,7 +196,7 @@ view(df_Asheville_2015)
 
 durham_asheville<- rbind.data.frame(df_Asheville_2015, df_durham_2015)
 
-ggplot(durham_asheville,aes(x=Date,y=max.withdrawals.mgd, color=water.system.name))) +
+ggplot(durham_asheville,aes(x=Date,y=max.withdrawals.mgd, color=water.system.name)) +
   geom_line() +
   labs(title = paste("Durham and Asheville Water Wtihdrawl"), X = "Date", y = " Max Daily Withdrawals (mgd)")
 ```
