@@ -159,7 +159,7 @@ max.withdrawals.mgd <- the_website %>%
   html_text()
 max.withdrawals.mgd
 
-#c(1,5,9,2,6,10,3,7,11,4,8,12)
+#rep(1:12)
 df_scrape<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
                           "Year"= rep(the_year,12),
                           "Max_Withdrawls_mgd"= as.numeric(max.withdrawals.mgd))%>% 
