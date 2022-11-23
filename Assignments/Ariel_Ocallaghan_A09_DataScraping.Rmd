@@ -40,6 +40,8 @@ mytheme <- theme_classic() +
   theme(axis.text = element_text(color = "black"), 
         legend.position = "top")
 theme_set(mytheme)
+
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50), tidy=TRUE)
 ```
 
 2. We will be scraping data from the NC DEQs Local Water Supply Planning website, specifically the Durham's 2021 Municipal Local Water Supply Plan (LWSP): 
@@ -189,7 +191,7 @@ class(df_durham_2015$Date)
 class(df_durham_2015$Max_Withdrawls_mgd)
 class(df_durham_2015$Date)
 
-Durham_2015_plot<-ggplot(df_durham_2015,aes(x=Date,y=max.withdrawals.mgd, group=1)) +
+Durham_2015_plot<-ggplot(df_durham_2015,aes(x=Date,y=Max_Withdrawls_mgd, group=1)) +
   geom_line()+
   geom_smooth(method="loess",se=FALSE) +
   labs(title = paste("2015 Max Daily Water Withdrawal Durham"), X = "Date", y = " Max Daily Withdrawals (mgd)")
@@ -213,24 +215,11 @@ class(durham_asheville$Date)
 class(durham_asheville$Max_Withdrawls_mgd)
 
 
+Durham__ashville_plot<-ggplot(durham_asheville,)+
+  geom_line(aes(x=Date,y=Max_Withdrawls_mgd, color=Water_system_name))
+  labs(title = paste("2015 Max Daily Water Withdrawal Durham and Asheville"), X = "Date", y = " Max Daily Withdrawals (mgd)")
+print(Durham__ashville_plot)
 
-#Durham__ashville_plot<-ggplot(durham_asheville,)+
- # geom_line(aes(x=Date,y=max.withdrawals.mgd, color=water.system.name))
-  #labs(title = paste("2015 Max Daily Water Withdrawal Durham and Asheville"), X = "Date", y = " Max Daily Withdrawals (mgd)")
-#print(Durham__ashville_plot)
-
-#Durham_asheville_2015<-ggplot(durham_asheville,(aesx=Date, y=max.withdrawals.mgd))+
- # geom_line(color=water.system.name)
-  #geom_line(color=water.system.name) +
-  #labs(title = paste("Durham and Asheville Water Wtihdrawl"), X = "Date", y = " Max Daily Withdrawals (mgd)")
-#print(Durham_asheville_2015)
-
-###TEST
-#Durham_asheville_2015.2<-ggplot(df_durham_2015,aes(x = Date,y = max.withdrawals.mgd))+
-  #ggplot(df_Asheville_2015) +
-  #geom_line(color=water.system.name) +
-  #labs(title = paste("Durham and Asheville Water Wtihdrawl"), X = "Date", y = " Max Daily Withdrawals (mgd)")
-#print(Durham_asheville_2015.2)
 
 
 ```
@@ -242,25 +231,22 @@ class(durham_asheville$Max_Withdrawls_mgd)
 
 ```{r fetch.and.plot.Asheville.multiyear.data}
 #9
+Ash_pwsid <- "01-11-010"
+Ash_year <- rep(2010:2019)
+Asheville_9y_df <- map2(Ash_year, Ash_pwsid, scrape.it)
+Ash_bind <- bind_rows(Asheville_9y_df)
 
-Ash_PWSID <- "01-11-010"
-Ash_Years <- rep(2010:2019)
+Ash_bind$Date <- as.Date(Ash_bind$Date, format ="%Y-%M-%D")
+class(Ash_bind$Date)
 
-Asheville_with_9y <- map2(Ash_PWSID, Ash_Years, scrape.it)
-
-Ash_Together <- bind_rows(Asheville_with_9y)
-
-#Ashvile_Durham_plot_9<-ggplot(Ash_Together,aesx=Date,y=max.withdrawals.mgd) +
-#geom_line() +
-#labs( X = "Date", y = " Max Withdrawls (MGM)")
-#print(Ashvile_Durham_plot_9)
+Ashvile_Durham_plot_9 <- ggplot(Ash_bind, aes(x=Date,y=Max_Withdrawls_mgd))+
+geom_line()+
+labs(title = paste("Asheville's max daily withdrawal 2010-2019"), X = "Date", y = " Max Withdrawls (MGM)")
+print(Ashvile_Durham_plot_9)
 
 
-#ggplot(Ash_Together,aes(x=Date,y=max.withdrawals.mgd)) +
-#geom_line(color = water.system.name) +
-#geom_smooth(method="lm",se=FALSE) +
-#labs( X = "Date", y = " Max Withdrawls (MGM)")
+
 ```
 
 >Question: Just by looking at the plot (i.e. not running statistics), does Asheville have a trend in water usage over time?
-Asheville uses more water over time. 
+Asheville uses more water over time. There is a peak water usage around 2017. There seems to be many seasonal and yearly fluxuuations but the max waer usage started to increase around 2017.  
