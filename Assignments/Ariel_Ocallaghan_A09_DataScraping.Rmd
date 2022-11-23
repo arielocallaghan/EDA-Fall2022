@@ -77,10 +77,10 @@ water.system.name <- webpage %>%
   html_text()
 water.system.name
 
-pswid <- webpage %>% 
+pwsid <- webpage %>% 
   html_nodes("td tr:nth-child(1) td:nth-child(5)") %>% 
   html_text()
-pswid
+pwsid
   
 ownership <- webpage %>% 
   html_nodes("div+ table tr:nth-child(2) td:nth-child(4)") %>% 
@@ -113,10 +113,10 @@ df_withdrawals<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12),
 
 df_withdrawals <- df_withdrawals %>% 
   mutate(Water_system_name = !!water.system.name,
-         PSWID = !!pswid,
+         PWSID = !!pwsid,
          Ownership = !!ownership,
          Date = my(paste(Month,"-",Year)))
-
+#5
 #plot geom_line(aes(group=1))
 Durham.max.withdrawl.plot<-ggplot(df_withdrawals) +
   geom_line(aes(x= Date,y= as.numeric(max.withdrawals.mgd))) + 
@@ -135,20 +135,18 @@ print(Durham.max.withdrawl.plot)
 ```{r construct.a.scraping.function}
 #6.
 
-
-scrape.it.2 <- function(pswid, year) {
-
-the.website.2 <-read_html(paste0('https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=', pswid, '/', year))
+scrape.it <- function(pswid, year) {
+the_website <- read_html(paste0('https://www.ncwater.org/WUDC/app/LWSP/search.php?',pwsid, '/', year))
 
 water.system.name <- webpage %>% 
   html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>% 
   html_text()
 water.system.name
 
-pswid <- webpage %>% 
+pwsid <- webpage %>% 
   html_nodes("td tr:nth-child(1) td:nth-child(5)") %>% 
   html_text()
-pswid
+pwsid
   
 ownership <- webpage %>% 
   html_nodes("div+ table tr:nth-child(2) td:nth-child(4)") %>% 
@@ -160,65 +158,17 @@ max.withdrawals.mgd <- webpage %>%
   html_text()
 max.withdrawals.mgd
 
-df_withdrawals.3<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
+df_scrape<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
                           "Year"= rep(year,12),
                           "Max_Withdrawals_mgd"= as.numeric(max.withdrawals.mgd))
 
-df_withdrawals.3 <- df_withdrawals.3 %>% 
+df_scrape <- df_scrape %>% 
   mutate(Water_system_name = !!water.system.name,
-         PSWID = !!pswid,
+         PWSID = !!pwsid,
          Ownership = !!ownership,
          Date = my(paste(Month,"-",Year)))
 
-return(df_withdrawals.3)
-
-print.data.frame(df_withdrawals.3)
-
-
-##############
-#####################---------------
-the_base_url <- 'https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid='
-pwsid.scrape <- '03-32-010'
-the_year <- 2015
-the_scrape_url <- paste0(the_base_url, pwsid.scrape,'&year=', the_year)
-print(the_scrape_url)
-
-the_website.scrape <- read_html(the_scrape_url)
-
-
-  
-water.system.name.2 <- the_website.scrape %>% 
-  html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>% 
-  html_text()
-water.system.name.2
-
-pswid.2 <- the_website.scrape %>% 
-  html_nodes("td tr:nth-child(1) td:nth-child(5)") %>% 
-  html_text()
-pswid.2
-  
-ownership.2 <- the_website.scrape %>% 
-  html_nodes("div+ table tr:nth-child(2) td:nth-child(4)") %>% 
-  html_text()
-ownership.2
-
-max.withdrawals.mgd.2 <- the_website.scrape %>% 
-  html_nodes("th~ td+ td , th~ td+ td") %>% 
-  html_text()
-max.withdrawals.mgd.2
-
-df_withdrawals.2<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
-                          "Year"= rep(the_year,12),
-                          "Max_Withdrawls_mgd"= as.numeric(max.withdrawals.mgd))
-
-df_withdrawals.2 <- df_withdrawals.2 %>% 
-  mutate(Water_system_name = !!water.system.name,
-         PSWID = !!pswid,
-         Ownership = !!ownership,
-         Date = my(paste(Month,"-",Year)))
-
-return(df_withdrawals.2)
-print.data.frame(df_withdrawals.2)
+return(df_scrape)
 
 }
 ```

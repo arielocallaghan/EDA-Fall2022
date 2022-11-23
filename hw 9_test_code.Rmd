@@ -130,6 +130,60 @@ view(durham.scrape)
 
 ```
 
+
+
+
+
+```{r}
+## NUMBER 6  DD------------
+the.website.2 <-read_html(paste0('https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=', pswid, '/', _year))
+
+##############
+#####################---------------
+the_base_url <- 'https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid='
+pwsid.scrape <- '03-32-010'
+the_year <- 2015
+the_scrape_url <- paste0(the_base_url, pwsid.scrape,'&year=', the_year)
+print(the_scrape_url)
+
+the_website.scrape <- read_html(the_scrape_url)
+
+
+  
+water.system.name.2 <- the_website.scrape %>% 
+  html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>% 
+  html_text()
+water.system.name.2
+
+pswid.2 <- the_website.scrape %>% 
+  html_nodes("td tr:nth-child(1) td:nth-child(5)") %>% 
+  html_text()
+pswid.2
+  
+ownership.2 <- the_website.scrape %>% 
+  html_nodes("div+ table tr:nth-child(2) td:nth-child(4)") %>% 
+  html_text()
+ownership.2
+
+max.withdrawals.mgd.2 <- the_website.scrape %>% 
+  html_nodes("th~ td+ td , th~ td+ td") %>% 
+  html_text()
+max.withdrawals.mgd.2
+
+df_withdrawals.2<-data.frame("Month" = c(1,5,9,2,6,10,3,7,11,4,8,12), 
+                          "Year"= rep(the_year,12),
+                          "Max_Withdrawls_mgd"= as.numeric(max.withdrawals.mgd))
+
+df_withdrawals.2 <- df_withdrawals.2 %>% 
+  mutate(Water_system_name = !!water.system.name,
+         PSWID = !!pswid,
+         Ownership = !!ownership,
+         Date = my(paste(Month,"-",Year)))
+
+return(df_withdrawals.2)
+print.data.frame(df_withdrawals.2)
+```
+
 ## Including Plots
 
 You can also embed plots, for example:
